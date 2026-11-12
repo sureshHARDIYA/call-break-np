@@ -180,9 +180,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </TabsList>
 
                   <div className="mt-5 space-y-1.5">
-                    <Label htmlFor="table-entry-name">Display Name</Label>
+                    <Label htmlFor="table-entry-name">
+                      Display Name <span className="text-danger-ink" aria-hidden="true">*</span>
+                    </Label>
                     <Input
                       id="table-entry-name"
+                      required
+                      aria-required="true"
                       placeholder="e.g., Suresh, Priya, Kiran"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}

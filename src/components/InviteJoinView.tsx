@@ -192,9 +192,13 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="invite-display-name">Your Display Name</Label>
+                  <Label htmlFor="invite-display-name">
+                    Your Display Name <span className="text-danger-ink" aria-hidden="true">*</span>
+                  </Label>
                   <Input
                     id="invite-display-name"
+                    required
+                    aria-required="true"
                     placeholder="Enter your name at the table"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}

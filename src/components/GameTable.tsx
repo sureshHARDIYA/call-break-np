@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
+  ArrowRight,
   BookOpen,
   Bot,
   LogOut,
@@ -553,6 +554,8 @@ TrickSlot.displayName = 'TrickSlot';
 /* -------------------------------------------------------------------------- */
 const CenterArena: React.FC = React.memo(() => {
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
+  // The player's own pick; null means "use the suggested bid".
+  const [pickedBid, setPickedBid] = useState<number | null>(null);
 
   const centerState = useGameStore(
     useShallow((s) => {
@@ -628,9 +631,16 @@ const CenterArena: React.FC = React.memo(() => {
     [centerState?.maxBid]
   );
 
+  const isMyTurnToBid = centerState?.isMyTurnToBid ?? false;
+  useEffect(() => {
+    // Start every bidding turn from the suggestion again.
+    if (!isMyTurnToBid) setPickedBid(null);
+  }, [isMyTurnToBid]);
+
   if (!centerState) return null;
 
   if (centerState.isMyTurnToBid) {
+    const chosenBid = pickedBid ?? centerState.suggestedBid;
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
@@ -644,7 +654,8 @@ const CenterArena: React.FC = React.memo(() => {
               Place Your Bid
             </h2>
             <p className="text-xs sm:text-sm text-ink-3">
-              Suggested bid: <strong className="text-brand-ink font-mono">{centerState.suggestedBid}</strong> · ♠ is trump
+              Pick a number, then confirm. Suggested:{' '}
+              <strong className="text-brand-ink font-mono">{centerState.suggestedBid}</strong> · ♠ is trump
             </p>
           </div>
           {secondsLeft !== null && (
@@ -656,17 +667,21 @@ const CenterArena: React.FC = React.memo(() => {
         <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
           {bidRange.map((num) => {
             const isSuggested = centerState.suggestedBid === num;
+            const isChosen = chosenBid === num;
             return (
               <button
                 key={num}
                 type="button"
-                onClick={() => useGameStore.getState().submitBid(num)}
+                aria-pressed={isChosen}
+                onClick={() => setPickedBid(num)}
                 title={isSuggested ? `Suggested bid: ${num}` : undefined}
                 className={cn(
                   'h-10 min-w-[44px] px-3 rounded-lg border font-mono text-sm sm:text-base font-bold transition-colors cursor-pointer',
-                  isSuggested
-                    ? 'border-brand-ink bg-brand text-white ring-2 ring-mint hover:bg-brand-hover'
-                    : 'border-line bg-surface-muted text-ink hover:bg-brand hover:text-white hover:border-brand-ink'
+                  isChosen
+                    ? 'border-brand-ink bg-brand text-white ring-2 ring-mint'
+                    : isSuggested
+                    ? 'border-brand-ink bg-surface-muted text-brand-ink hover:bg-tint'
+                    : 'border-line bg-surface-muted text-ink hover:bg-tint hover:border-brand-ink'
                 )}
               >
                 {num}
@@ -674,6 +689,18 @@ const CenterArena: React.FC = React.memo(() => {
             );
           })}
         </div>
+
+        <Button
+          size="lg"
+          className="bid-cta relative mt-4 w-full"
+          disabled={chosenBid === null}
+          onClick={() => {
+            if (chosenBid !== null) useGameStore.getState().submitBid(chosenBid);
+          }}
+        >
+          Bid {chosenBid ?? ''}
+          <ArrowRight className="bid-cta-arrow h-4 w-4" />
+        </Button>
       </motion.div>
     );
   }
