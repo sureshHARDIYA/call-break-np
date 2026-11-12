@@ -32,6 +32,9 @@ import { roomStore } from './storage.ts';
 
 const BOT_NAMES = ['Aarav', 'Sita', 'Kiran', 'Maya', 'Bikram', 'Nisha', 'Rohan', 'Anjali'];
 
+// Short pause before a player's final card is played for them, so the trick stays readable.
+const LAST_CARD_AUTOPLAY_DELAY_MS = 700;
+
 interface RoomRuntime {
   room: RoomState;
   seatSessions: Record<SeatIndex, string | null>;
@@ -1594,6 +1597,17 @@ export class RoomManager {
         runtime.botTimer = null;
         this.executeBotTurn(runtime, activeSeat);
       }, delay);
+      return;
+    }
+
+    if (room.phase === 'PLAYING' && room.hands[activeSeat].length === 1) {
+      // One card left means there is nothing to decide: play it for the player.
+      runtime.turnTimer = setTimeout(() => {
+        runtime.turnTimer = null;
+        if (room.phase !== 'PLAYING' || room.activeTurnSeat !== activeSeat) return;
+        const lastCard = room.hands[activeSeat][0];
+        if (lastCard) this.applyCardPlay(runtime, activeSeat, lastCard.id);
+      }, LAST_CARD_AUTOPLAY_DELAY_MS);
       return;
     }
 

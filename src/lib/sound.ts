@@ -1,5 +1,16 @@
+// Recorded card sounds: Kenney "Casino Audio" (kenney.nl), CC0.
+const CARD_PLACE_SAMPLE_URLS = [
+  '/sounds/card-place-1.mp3',
+  '/sounds/card-place-2.mp3',
+  '/sounds/card-place-3.mp3',
+  '/sounds/card-place-4.mp3',
+];
+const CARD_PLACE_GAIN = 0.6;
+
 class SoundEngine {
   private ctx: AudioContext | null = null;
+  private cardPlaceBuffers: AudioBuffer[] = [];
+  private samplesRequested = false;
   public muted = false;
 
   private getContext(): AudioContext | null {
@@ -11,6 +22,7 @@ class SoundEngine {
           .webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
+        this.loadSamples(this.ctx);
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
@@ -21,6 +33,42 @@ class SoundEngine {
 
   public unlock() {
     this.getContext();
+  }
+
+  private loadSamples(ctx: AudioContext): void {
+    if (this.samplesRequested) return;
+    this.samplesRequested = true;
+    for (const url of CARD_PLACE_SAMPLE_URLS) {
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error(`Sound ${url} returned ${res.status}`);
+          return res.arrayBuffer();
+        })
+        .then((data) => ctx.decodeAudioData(data))
+        .then((buffer) => {
+          this.cardPlaceBuffers = [...this.cardPlaceBuffers, buffer];
+        })
+        .catch(() => {
+          // A missing sample is not fatal: card plays fall back to the synthesized snap.
+        });
+    }
+  }
+
+  /** Plays a random recorded card sound. Returns false when none has loaded yet. */
+  private playCardPlaceSample(gain: number, playbackRate: number): boolean {
+    const ctx = this.getContext();
+    if (!ctx || this.cardPlaceBuffers.length === 0) return false;
+    const buffer =
+      this.cardPlaceBuffers[Math.floor(Math.random() * this.cardPlaceBuffers.length)];
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.playbackRate.value = playbackRate;
+    const gainNode = ctx.createGain();
+    gainNode.gain.value = gain;
+    source.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    source.start();
+    return true;
   }
 
   private playTone(
@@ -116,14 +164,21 @@ class SoundEngine {
     }
   }
 
-  /** Soft linen slide + damped felt thump when a card lands on the table */
+  /** A real card landing on the table, with slight pitch variety per play. */
   playCardSnap() {
+    const playbackRate = 0.96 + Math.random() * 0.1;
+    if (this.playCardPlaceSample(CARD_PLACE_GAIN, playbackRate)) return;
+    // Fallback until the recordings load: soft linen slide + damped felt thump.
     this.playNoiseFlick(0, 0.032, 3100, 0.026, 0.9);
     this.playFeltThud(150, 58, 0.048, 0.085, 0.012);
   }
 
-  /** Crisp double-snap + deep felt thud with subtle shimmer for a spade trump cut */
+  /** A heavier card slap with a subtle shimmer for a spade trump cut */
   playTrumpCut() {
+    if (this.playCardPlaceSample(CARD_PLACE_GAIN * 1.3, 0.9)) {
+      this.playTone(659.25, 0.1, 'sine', 0.035, 0.025);
+      return;
+    }
     this.playNoiseFlick(0, 0.045, 3400, 0.024, 1.1);
     this.playFeltThud(185, 64, 0.065, 0.11, 0.01);
     this.playNoiseFlick(0.032, 0.035, 2400, 0.028, 1.2);

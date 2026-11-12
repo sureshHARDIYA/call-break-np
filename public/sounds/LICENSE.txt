@@ -1,0 +1,2 @@
+Card sounds in this folder come from the "Casino Audio" pack by Kenney (https://kenney.nl/assets/casino-audio),
+released under Creative Commons CC0 (public domain). Converted from OGG to mono MP3.
