@@ -114,26 +114,26 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1410] text-[#F4F1EA] flex flex-col">
+    <div className="min-h-screen bg-[#F2F4EC] text-[#1C2B2B] flex flex-col">
       {/* Clean 3-zone Top Bar */}
-      <header className="border-b border-white/10 bg-[#0D1813]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 h-16 flex items-center justify-between gap-8">
-          <span className="font-display text-xl font-bold tracking-tight text-[#F4F1EA] whitespace-nowrap shrink-0">
+      <header className="border-b border-[#D3DCDC] bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8 h-16 flex items-center justify-between gap-8">
+          <span className="font-display text-2xl font-bold tracking-tight text-[#007272] whitespace-nowrap shrink-0">
             Call Break
           </span>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm text-[#9EB3A8]">
+          <nav className="hidden md:flex items-center gap-6 text-base font-medium text-[#334343]">
             <button
               type="button"
               onClick={() => setRulesOpen(true)}
-              className="hover:text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="hover:text-[#007272] hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               Rules &amp; Scoring
             </button>
             <button
               type="button"
               onClick={handleCopyInvite}
-              className="hover:text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="hover:text-[#007272] hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               Copy Invite
             </button>
@@ -141,62 +141,62 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
           <div className="flex items-center gap-2.5 shrink-0">
             <Button variant="outline" size="sm" onClick={onLeaveRoom}>
-              <LogOut className="h-3.5 w-3.5" />
+              <LogOut className="h-4 w-4" />
               Leave
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 py-6 sm:py-8">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-8 py-6 sm:py-8">
         {/* Room Header + Invite Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-white/10">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-[#D3DCDC]">
           <div>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#9EB3A8]">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-[#556767]">
               <span>Waiting Lobby</span>
               <span aria-hidden="true">·</span>
-              <span className="font-mono font-semibold text-[#D99B26]">
+              <span className="font-mono font-semibold text-[#007272]">
                 Code {room.roomCode}
               </span>
               <span aria-hidden="true">·</span>
               <span className="tabular-nums">{occupiedCount}/4 Seated</span>
             </div>
-            <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold text-[#F4F1EA]">
+            <h1 className="mt-1 font-display text-3xl sm:text-4xl font-semibold text-[#1C2B2B]">
               {room.roomName}
             </h1>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center rounded-lg border border-white/12 bg-[#111F18] px-3 py-2 text-xs font-mono text-[#C5D4CC] max-w-[260px] sm:max-w-xs truncate">
+            <div className="flex items-center rounded-lg border border-[#D3DCDC] bg-white px-3.5 py-2.5 text-sm font-mono text-[#334343] max-w-[260px] sm:max-w-xs truncate">
               {inviteUrl}
             </div>
             <Button variant="secondary" onClick={handleCopyInvite}>
-              {copied ? <Check className="h-4 w-4 text-[#34D399]" /> : <Copy className="h-4 w-4" />}
+              {copied ? <Check className="h-4 w-4 text-[#0E7C56]" /> : <Copy className="h-4 w-4" />}
               {copied ? 'Copied' : 'Copy Link'}
             </Button>
             <Button variant="outline" onClick={handleNativeShare}>
-              <Share2 className="h-4 w-4" />
+              <Share2 className="h-4 w-4 text-[#007272]" />
               Invite Friends
             </Button>
           </div>
         </div>
 
-        {/* Main 3-Column Grid: 4 Seats + Settings + Chat */}
+        {/* Main Grid: 4 Seats + Settings + Chat */}
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left/Center: 4 Seats & Host Start Controls */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="font-display text-lg font-semibold text-[#F4F1EA]">
+                <h2 className="font-display text-xl font-semibold text-[#1C2B2B]">
                   Table Seats (Counterclockwise)
                 </h2>
-                <p className="text-xs text-[#9EB3A8]">
+                <p className="text-sm text-[#556767]">
                   Fill all 4 seats with friends or AI bots to deal Round 1.
                 </p>
               </div>
               {isHost && !allOccupied && (
                 <Button variant="secondary" size="sm" onClick={handleFillBots}>
-                  <Bot className="h-3.5 w-3.5" />
+                  <Bot className="h-4 w-4" />
                   Fill Vacant with Bots
                 </Button>
               )}
@@ -209,12 +209,12 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                   <div
                     key={seat.seat}
                     className={cn(
-                      'rounded-xl border p-4 transition-colors',
+                      'rounded-xl border p-4 transition-colors bg-white',
                       seat.occupied
                         ? isMe
-                          ? 'border-[#D99B26]/65 bg-[#15281E]'
-                          : 'border-white/12 bg-[#111F18]'
-                        : 'border-dashed border-white/16 bg-[#0D1812]'
+                          ? 'border-[#007272] bg-[#E8F6F2]/65'
+                          : 'border-[#D3DCDC]'
+                        : 'border-dashed border-[#869696] bg-white/70'
                     )}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -224,9 +224,9 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             'h-11 w-11 rounded-full flex items-center justify-center font-semibold text-sm shrink-0',
                             seat.occupied
                               ? seat.playerType === 'bot'
-                                ? 'bg-[#1D3529] text-[#D99B26] border border-[#D99B26]/30'
-                                : 'bg-[#D99B26] text-[#0B1410]'
-                              : 'bg-white/6 text-[#7D9488]'
+                                ? 'bg-[#E8F6F2] text-[#007272] border border-[#007272]/25'
+                                : 'bg-[#007272] text-white'
+                              : 'bg-[#F2F4EC] text-[#556767]'
                           )}
                         >
                           {seat.occupied ? (
@@ -242,23 +242,23 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-medium text-sm text-[#F4F1EA] truncate">
+                            <span className="font-semibold text-base text-[#1C2B2B] truncate">
                               {seat.occupied ? seat.displayName : `Open Seat ${seat.seat + 1}`}
                             </span>
                             {isMe && (
-                              <span className="text-[11px] font-medium text-[#D99B26]">
+                              <span className="text-xs font-semibold text-[#007272]">
                                 (You)
                               </span>
                             )}
                             {seat.isHost && (
                               <Crown
-                                className="h-3.5 w-3.5 text-[#D99B26] shrink-0"
+                                className="h-4 w-4 text-[#007272] shrink-0"
                                 aria-label="Room Host"
                               />
                             )}
                           </div>
 
-                          <div className="mt-0.5 flex items-center gap-1.5 text-xs text-[#9EB3A8]">
+                          <div className="mt-0.5 flex items-center gap-1.5 text-sm text-[#556767]">
                             {seat.occupied ? (
                               <>
                                 <span>
@@ -271,7 +271,9 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                                 <span aria-hidden="true">·</span>
                                 <span
                                   className={
-                                    seat.isReady ? 'text-[#34D399]' : 'text-[#9EB3A8]'
+                                    seat.isReady
+                                      ? 'font-semibold text-[#0E7C56]'
+                                      : 'text-[#556767]'
                                   }
                                 >
                                   {seat.isReady ? 'Ready' : 'Not ready'}
@@ -294,7 +296,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             size="sm"
                             onClick={() => onSelectSeat(seat.seat)}
                           >
-                            <UserPlus className="h-3.5 w-3.5" />
+                            <UserPlus className="h-4 w-4 text-[#007272]" />
                             Sit Here
                           </Button>
                           {isHost && (
@@ -305,7 +307,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                                 onAddBot(seat.seat, room.settings.botDifficulty)
                               }
                             >
-                              <Bot className="h-3.5 w-3.5" />
+                              <Bot className="h-4 w-4" />
                               Add Bot
                             </Button>
                           )}
@@ -317,9 +319,9 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                           variant="ghost"
                           size="sm"
                           onClick={() => onRemoveBot(seat.seat)}
-                          className="text-[#F87171] hover:text-[#FCA5A5] hover:bg-[#7F1D1D]/30"
+                          className="text-[#C81E1E] hover:text-[#A61717] hover:bg-[#FEE2E2]"
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
+                          <Trash2 className="h-4 w-4" />
                           Remove Bot
                         </Button>
                       )}
@@ -343,7 +345,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             size="sm"
                             onClick={() => onTransferHost(seat.seat)}
                           >
-                            <Crown className="h-3.5 w-3.5" />
+                            <Crown className="h-4 w-4 text-[#007272]" />
                             Make Host
                           </Button>
                         )}
@@ -354,13 +356,13 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
             </div>
 
             {/* Room Settings Panel */}
-            <div className="rounded-xl border border-white/12 bg-[#111F18] p-5 space-y-5">
+            <div className="rounded-xl border border-[#D3DCDC] bg-white p-6 space-y-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="font-display text-lg font-semibold text-[#F4F1EA]">
+                  <h2 className="font-display text-xl font-semibold text-[#1C2B2B]">
                     Match Rules &amp; Configuration
                   </h2>
-                  <p className="text-xs text-[#9EB3A8]">
+                  <p className="text-sm text-[#556767]">
                     {isHost
                       ? 'Traditional Nepali rules are enabled by default.'
                       : 'Only the host can adjust rules before starting.'}
@@ -429,11 +431,11 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-white/10">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-[#E4EAEA]">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label className="text-[#F4F1EA]">Strict Must-Beat</Label>
-                    <p className="text-[11px] text-[#8DA499]">
+                    <Label className="text-[#1C2B2B]">Strict Must-Beat</Label>
+                    <p className="text-xs text-[#556767]">
                       Beat highest lead card if able
                     </p>
                   </div>
@@ -448,8 +450,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label className="text-[#F4F1EA]">Strict Must-Trump</Label>
-                    <p className="text-[11px] text-[#8DA499]">
+                    <Label className="text-[#1C2B2B]">Strict Must-Trump</Label>
+                    <p className="text-xs text-[#556767]">
                       Play ♠ when void in lead suit
                     </p>
                   </div>
@@ -464,8 +466,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label className="text-[#F4F1EA]">Turn Timer (25s)</Label>
-                    <p className="text-[11px] text-[#8DA499]">
+                    <Label className="text-[#1C2B2B]">Turn Timer (25s)</Label>
+                    <p className="text-xs text-[#556767]">
                       Auto-play if timer expires
                     </p>
                   </div>
@@ -480,8 +482,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               </div>
 
               {/* Start Game Action */}
-              <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <p className="text-xs text-[#9EB3A8]">
+              <div className="pt-4 border-t border-[#E4EAEA] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-sm text-[#4E5D5D]">
                   {!allOccupied
                     ? `Seat ${4 - occupiedCount} more player${
                         4 - occupiedCount > 1 ? 's' : ''
@@ -495,7 +497,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                     size="lg"
                     disabled={!allOccupied}
                     onClick={onStartGame}
-                    className="sm:min-w-[180px]"
+                    className="sm:min-w-[190px]"
                   >
                     <Play className="h-4 w-4" />
                     Start Match

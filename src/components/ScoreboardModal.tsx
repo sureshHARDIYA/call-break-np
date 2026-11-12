@@ -52,7 +52,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2.5">
-            {isGameComplete && <Trophy className="h-5 w-5 text-[#D99B26]" />}
+            {isGameComplete && <Trophy className="h-6 w-6 text-[#007272]" />}
             {isGameComplete
               ? `Match Complete — ${winnerNames} ${
                   room.winnerSeats.length > 1 ? 'Share Victory' : 'Wins'
@@ -69,7 +69,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
         </DialogHeader>
 
         {/* Current Standings */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {sortedStandings.map((seat, idx) => {
             const isWinner = isGameComplete && room.winnerSeats.includes(seat.seat);
             const latestRound =
@@ -93,13 +93,13 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
               <div
                 key={seat.seat}
                 className={cn(
-                  'rounded-lg border p-3',
+                  'rounded-lg border p-3.5',
                   isWinner
-                    ? 'border-[#D99B26] bg-[#D99B26]/12'
-                    : 'border-white/10 bg-[#0B1410]'
+                    ? 'border-[#007272] bg-[#E8F6F2]'
+                    : 'border-[#D3DCDC] bg-[#F2F4EC]/70'
                 )}
               >
-                <div className="flex items-center justify-between text-xs text-[#9EB3A8]">
+                <div className="flex items-center justify-between text-xs font-semibold text-[#556767]">
                   <span>#{idx + 1}</span>
                   <div className="flex items-center gap-1.5">
                     {reactionEmoji && (
@@ -114,22 +114,22 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                       </span>
                     )}
                     {isWinner && (
-                      <span className="font-semibold text-[#D99B26]">Winner</span>
+                      <span className="font-semibold text-[#007272]">Winner</span>
                     )}
                   </div>
                 </div>
-                <div className="mt-1 font-medium text-sm text-[#F4F1EA] truncate">
+                <div className="mt-1 font-semibold text-base text-[#1C2B2B] truncate">
                   {seat.displayName}
                   {seat.seat === room.mySeat ? ' (You)' : ''}
                 </div>
                 <div
                   className={cn(
-                    'mt-1 font-mono text-lg font-bold tabular-nums',
+                    'mt-1 font-mono text-xl font-bold tabular-nums',
                     seat.totalScoreTenths > 0
-                      ? 'text-[#34D399]'
+                      ? 'text-[#0E7C56]'
                       : seat.totalScoreTenths < 0
-                      ? 'text-[#F87171]'
-                      : 'text-[#F4F1EA]'
+                      ? 'text-[#C81E1E]'
+                      : 'text-[#1C2B2B]'
                   )}
                 >
                   {formatScoreTenths(seat.totalScoreTenths)}
@@ -140,13 +140,13 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
         </div>
 
         {/* Round-by-round breakdown table */}
-        <div className="overflow-x-auto rounded-lg border border-white/10 bg-[#0B1410]">
-          <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="border-b border-white/10 text-[#9EB3A8]">
+        <div className="overflow-x-auto rounded-lg border border-[#D3DCDC] bg-white">
+          <table className="w-full text-left text-sm sm:text-base">
+            <thead className="bg-[#F2F4EC] border-b border-[#D3DCDC] text-sm text-[#4E5D5D]">
               <tr>
-                <th className="px-3 py-2.5 font-medium">Round</th>
+                <th className="px-3.5 py-2.5 font-semibold">Round</th>
                 {room.seats.map((seat) => (
-                  <th key={seat.seat} className="px-3 py-2.5 font-medium">
+                  <th key={seat.seat} className="px-3.5 py-2.5 font-semibold">
                     <span className="block truncate max-w-[110px]">
                       {seat.displayName}
                     </span>
@@ -154,12 +154,12 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/8 font-mono tabular-nums">
+            <tbody className="divide-y divide-[#E4EAEA] font-mono tabular-nums">
               {room.roundHistory.length === 0 ? (
                 <tr>
                   <td
                     colSpan={5}
-                    className="px-3 py-6 text-center font-sans text-xs text-[#9EB3A8]"
+                    className="px-3.5 py-6 text-center font-sans text-sm text-[#556767]"
                   >
                     Round scores will appear here once Round 1 concludes.
                   </td>
@@ -167,23 +167,23 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
               ) : (
                 room.roundHistory.map((round) => (
                   <tr key={round.roundNumber}>
-                    <td className="px-3 py-2 text-[#9EB3A8]">R{round.roundNumber}</td>
+                    <td className="px-3.5 py-2.5 text-[#556767]">R{round.roundNumber}</td>
                     {room.seats.map((seat) => {
                       const res = round.results.find((r) => r.seat === seat.seat);
-                      if (!res) return <td key={seat.seat} className="px-3 py-2">—</td>;
+                      if (!res) return <td key={seat.seat} className="px-3.5 py-2.5">—</td>;
                       return (
-                        <td key={seat.seat} className="px-3 py-2">
+                        <td key={seat.seat} className="px-3.5 py-2.5">
                           <span
                             className={cn(
                               'font-semibold',
                               res.roundScoreTenths >= 0
-                                ? 'text-[#34D399]'
-                                : 'text-[#F87171]'
+                                ? 'text-[#0E7C56]'
+                                : 'text-[#C81E1E]'
                             )}
                           >
                             {formatScoreTenths(res.roundScoreTenths)}
                           </span>
-                          <span className="ml-1.5 text-[11px] text-[#8DA499]">
+                          <span className="ml-1.5 text-xs text-[#556767]">
                             ({res.tricksWon}/{res.bid})
                           </span>
                         </td>
@@ -193,21 +193,21 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 ))
               )}
             </tbody>
-            <tfoot className="border-t border-white/14 bg-[#111F18] font-mono tabular-nums">
+            <tfoot className="border-t border-[#D3DCDC] bg-[#F2F4EC] font-mono tabular-nums">
               <tr>
-                <td className="px-3 py-2.5 font-sans text-xs font-semibold text-[#F4F1EA]">
+                <td className="px-3.5 py-2.5 font-sans text-sm font-semibold text-[#1C2B2B]">
                   Total
                 </td>
                 {room.seats.map((seat) => (
                   <td
                     key={seat.seat}
                     className={cn(
-                      'px-3 py-2.5 font-bold',
+                      'px-3.5 py-2.5 font-bold',
                       seat.totalScoreTenths > 0
-                        ? 'text-[#34D399]'
+                        ? 'text-[#0E7C56]'
                         : seat.totalScoreTenths < 0
-                        ? 'text-[#F87171]'
-                        : 'text-[#F4F1EA]'
+                        ? 'text-[#C81E1E]'
+                        : 'text-[#1C2B2B]'
                     )}
                   >
                     {formatScoreTenths(seat.totalScoreTenths)}
@@ -227,7 +227,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
-              <span className="text-xs text-[#9EB3A8]">
+              <span className="text-sm text-[#556767]">
                 Waiting for host to deal Round {room.currentRound + 1}…
               </span>
             )
@@ -240,7 +240,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 Play Again
               </Button>
             ) : (
-              <span className="text-xs text-[#9EB3A8]">
+              <span className="text-sm text-[#556767]">
                 Waiting for host to start a new match…
               </span>
             )

@@ -76,13 +76,13 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#0B1410] text-[#F4F1EA] flex flex-col">
-      <header className="border-b border-white/10 bg-[#0D1813]">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div className="min-h-screen bg-[#F2F4EC] text-[#1C2B2B] flex flex-col">
+      <header className="border-b border-[#D3DCDC] bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-8 h-16 flex items-center justify-between">
           <button
             type="button"
             onClick={onBackHome}
-            className="font-display text-xl font-bold text-[#F4F1EA] cursor-pointer"
+            className="font-display text-2xl font-bold text-[#007272] cursor-pointer"
           >
             Call Break
           </button>
@@ -94,17 +94,17 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
       </header>
 
       <main className="flex-1 flex items-center justify-center px-4 py-10">
-        <div className="w-full max-w-lg rounded-xl border border-white/12 bg-[#111F18] p-6 sm:p-8 shadow-2xl space-y-6">
+        <div className="w-full max-w-lg rounded-xl border border-[#D3DCDC] bg-white p-6 sm:p-8 shadow-[0_10px_32px_rgba(0,70,70,0.07)] space-y-6">
           {isLoading ? (
-            <div className="py-10 text-center text-sm text-[#9EB3A8]">
-              Looking up room <span className="font-mono">{roomCode}</span>…
+            <div className="py-10 text-center text-base text-[#556767]">
+              Looking up room <span className="font-mono font-semibold">{roomCode}</span>…
             </div>
           ) : isError || !data ? (
             <div className="space-y-4 text-center py-6">
-              <h1 className="font-display text-2xl font-bold text-[#F4F1EA]">
+              <h1 className="font-display text-2xl font-semibold text-[#1C2B2B]">
                 Room {roomCode} Not Found
               </h1>
-              <p className="text-sm text-[#9EB3A8]">
+              <p className="text-base text-[#556767]">
                 {error instanceof Error
                   ? error.message
                   : 'This Call Break table may have expired or the code is incorrect.'}
@@ -113,11 +113,11 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
             </div>
           ) : data.isFull ? (
             <div className="space-y-4 text-center py-6">
-              <h1 className="font-display text-2xl font-bold text-[#F4F1EA]">
+              <h1 className="font-display text-2xl font-semibold text-[#1C2B2B]">
                 {data.roomName} is Full
               </h1>
-              <p className="text-sm text-[#9EB3A8]">
-                All 4 seats in room <span className="font-mono">{data.roomCode}</span>{' '}
+              <p className="text-base text-[#556767]">
+                All 4 seats in room <span className="font-mono font-semibold">{data.roomCode}</span>{' '}
                 are already occupied. If you were previously seated on this device,
                 try reconnecting from your original browser session.
               </p>
@@ -126,10 +126,10 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
           ) : (
             <>
               <div>
-                <div className="flex items-center gap-2 text-xs text-[#9EB3A8]">
+                <div className="flex items-center gap-2 text-sm text-[#556767]">
                   <span>Table Invitation</span>
                   <span aria-hidden="true">·</span>
-                  <span className="font-mono font-semibold text-[#D99B26]">
+                  <span className="font-mono font-semibold text-[#007272]">
                     {data.roomCode}
                   </span>
                   <span aria-hidden="true">·</span>
@@ -137,7 +137,7 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
                     {data.settings.rounds} Round{data.settings.rounds > 1 ? 's' : ''}
                   </span>
                 </div>
-                <h1 className="mt-1 font-display text-2xl sm:text-3xl font-bold text-[#F4F1EA]">
+                <h1 className="mt-1 font-display text-2xl sm:text-3xl font-semibold text-[#1C2B2B]">
                   {data.roomName}
                 </h1>
               </div>
@@ -145,7 +145,7 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
               {/* Seat Picker */}
               <div className="space-y-2">
                 <Label>Choose a Vacant Seat (or Auto-Assign)</Label>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-3">
                   {data.seats.map((seat) => {
                     const selected = preferredSeat === seat.seat;
                     return (
@@ -157,27 +157,27 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
                           setPreferredSeat(selected ? undefined : seat.seat)
                         }
                         className={cn(
-                          'rounded-lg border p-3 text-left transition-colors',
+                          'rounded-lg border p-3.5 text-left transition-colors',
                           seat.occupied
-                            ? 'border-white/8 bg-[#0B1410] opacity-65 cursor-not-allowed'
+                            ? 'border-[#D3DCDC] bg-[#F2F4EC] opacity-65 cursor-not-allowed'
                             : selected
-                            ? 'border-[#D99B26] bg-[#182E23] cursor-pointer'
-                            : 'border-white/14 bg-[#0D1812] hover:border-white/30 cursor-pointer'
+                            ? 'border-[#007272] bg-[#E8F6F2] ring-1 ring-[#007272] cursor-pointer'
+                            : 'border-[#D3DCDC] bg-white hover:border-[#007272]/60 cursor-pointer'
                         )}
                       >
-                        <div className="flex items-center justify-between text-xs text-[#9EB3A8]">
+                        <div className="flex items-center justify-between text-xs font-medium text-[#556767]">
                           <span>Seat {seat.seat + 1}</span>
                           {seat.occupied ? (
                             seat.playerType === 'bot' ? (
-                              <Bot className="h-3.5 w-3.5 text-[#D99B26]" />
+                              <Bot className="h-4 w-4 text-[#007272]" />
                             ) : (
-                              <Users className="h-3.5 w-3.5" />
+                              <Users className="h-4 w-4 text-[#4E5D5D]" />
                             )
                           ) : (
-                            <span className="text-[#34D399]">Open</span>
+                            <span className="font-semibold text-[#007272]">Open</span>
                           )}
                         </div>
-                        <div className="mt-1 text-sm font-medium text-[#F4F1EA] truncate">
+                        <div className="mt-1 text-base font-semibold text-[#1C2B2B] truncate">
                           {seat.occupied ? seat.displayName : 'Tap to claim'}
                         </div>
                       </button>

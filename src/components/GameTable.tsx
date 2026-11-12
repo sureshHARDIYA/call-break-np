@@ -53,10 +53,10 @@ function getInitials(name: string): string {
 }
 
 const AVATAR_TONES: Record<SeatIndex, string> = {
-  0: 'from-[#D99B26] to-[#9A6B12] text-[#0B1410]',
-  1: 'from-[#2563EB] to-[#1E3A8A] text-white',
-  2: 'from-[#059669] to-[#064E3B] text-white',
-  3: 'from-[#DC2626] to-[#7F1D1D] text-white',
+  0: 'from-[#007272] to-[#004E4E] text-white',
+  1: 'from-[#1D4ED8] to-[#1E3A8A] text-white',
+  2: 'from-[#0E7C56] to-[#065F46] text-white',
+  3: 'from-[#B45309] to-[#78350F] text-white',
 };
 
 /* -------------------------------------------------------------------------- */
@@ -88,16 +88,16 @@ const TopHudBar: React.FC<{
   );
 
   return (
-    <header className="relative z-20 flex h-12 sm:h-14 shrink-0 items-center justify-between gap-4 border-b border-white/10 bg-[#0B1410]/95 px-3 sm:px-6">
+    <header className="relative z-20 flex h-13 sm:h-14 shrink-0 items-center justify-between gap-4 border-b border-[#D3DCDC] bg-white px-3 sm:px-6 text-[#1C2B2B]">
       <div className="flex items-center gap-3 min-w-0">
-        <span className="font-display text-base sm:text-lg font-bold text-[#F4F1EA] whitespace-nowrap">
+        <span className="font-display text-lg sm:text-xl font-bold text-[#007272] whitespace-nowrap">
           Call Break
         </span>
-        <span className="hidden sm:inline text-white/20" aria-hidden="true">
+        <span className="hidden sm:inline text-[#D3DCDC]" aria-hidden="true">
           |
         </span>
-        <div className="hidden sm:flex items-center gap-2 text-xs text-[#9EB3A8] font-mono tabular-nums truncate">
-          <span>{roomCode}</span>
+        <div className="hidden sm:flex items-center gap-2 text-sm text-[#4E5D5D] font-mono tabular-nums truncate">
+          <span className="font-semibold text-[#1C2B2B]">{roomCode}</span>
           <span aria-hidden="true">·</span>
           <span>
             Round {currentRound}/{totalRounds}
@@ -109,11 +109,11 @@ const TopHudBar: React.FC<{
 
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
         <Button variant="ghost" size="sm" onClick={onOpenScoreboard}>
-          <Trophy className="h-4 w-4 text-[#D99B26]" />
+          <Trophy className="h-4 w-4 text-[#007272]" />
           <span className="hidden sm:inline">Scores</span>
         </Button>
         <Button variant="ghost" size="sm" onClick={onOpenRules}>
-          <BookOpen className="h-4 w-4" />
+          <BookOpen className="h-4 w-4 text-[#334343]" />
           <span className="hidden md:inline">Rules</span>
         </Button>
         <Button
@@ -124,9 +124,9 @@ const TopHudBar: React.FC<{
           aria-label={muted ? 'Unmute sounds' : 'Mute sounds'}
         >
           {muted ? (
-            <VolumeX className="h-4 w-4 text-[#9EB3A8]" />
+            <VolumeX className="h-4 w-4 text-[#556767]" />
           ) : (
-            <Volume2 className="h-4 w-4 text-[#D99B26]" />
+            <Volume2 className="h-4 w-4 text-[#007272]" />
           )}
         </Button>
         <Button
@@ -140,28 +140,23 @@ const TopHudBar: React.FC<{
           }
           className={cn(
             'relative overflow-visible',
-            unreadChatCount > 0 && !chatOpen && 'border border-[#D99B26]/70'
+            unreadChatCount > 0 && !chatOpen && 'border-[#007272] bg-[#E8F6F2]'
           )}
         >
           <span className="relative inline-flex items-center justify-center">
-            <MessageSquare
-              className={cn(
-                'h-4 w-4',
-                unreadChatCount > 0 && !chatOpen && 'text-[#D99B26]'
-              )}
-            />
+            <MessageSquare className="h-4 w-4 text-[#007272]" />
             {unreadChatCount > 0 && (
-              <span className="sm:hidden absolute -top-2 -right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#D99B26] px-1 font-mono text-[10px] font-bold leading-none text-[#0B1410] ring-2 ring-[#0B1410] tabular-nums">
+              <span className="sm:hidden absolute -top-2 -right-2 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[#007272] px-1 font-mono text-[10px] font-bold leading-none text-white ring-2 ring-white tabular-nums">
                 {unreadChatCount > 99 ? '99+' : unreadChatCount}
               </span>
             )}
           </span>
           <span className="hidden sm:inline">Chat</span>
           {unreadChatCount > 0 && (
-            <span className="hidden sm:flex absolute -top-1.5 -right-1.5 h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#D99B26] px-1 font-mono text-[10px] font-bold leading-none text-[#0B1410] ring-2 ring-[#0B1410] tabular-nums shadow-md">
+            <span className="hidden sm:flex absolute -top-1.5 -right-1.5 h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#007272] px-1 font-mono text-[10px] font-bold leading-none text-white ring-2 ring-white tabular-nums shadow-sm">
               <span
                 aria-hidden="true"
-                className="absolute inset-0 rounded-full bg-[#D99B26] animate-ping opacity-45"
+                className="absolute inset-0 rounded-full bg-[#007272] animate-ping opacity-45"
               />
               <span className="relative">
                 {unreadChatCount > 99 ? '99+' : unreadChatCount}
@@ -291,12 +286,12 @@ const SeatPlate: React.FC<{
     >
       <div
         className={cn(
-          'relative flex items-center gap-3 rounded-2xl border px-3 py-2 backdrop-blur-md transition-colors duration-150',
+          'relative flex items-center gap-3 rounded-xl border px-3 py-2 shadow-md transition-colors duration-150',
           info.isTrickWinner
-            ? 'border-[#10B981] bg-[#0B2E20]/95 shadow-[0_0_26px_rgba(16,185,129,0.35)]'
+            ? 'border-[#28B482] bg-[#E8F6F2] ring-2 ring-[#28B482]/60 shadow-[0_6px_22px_rgba(40,180,130,0.3)]'
             : info.isActive
-            ? 'border-[#D99B26] bg-[#13251D]/95 shadow-[0_0_22px_rgba(217,155,38,0.28)]'
-            : 'border-white/14 bg-[#0B1410]/88',
+            ? 'border-[#007272] bg-white ring-2 ring-[#A5E1D2] shadow-[0_6px_22px_rgba(0,0,0,0.22)]'
+            : 'border-[#D3DCDC] bg-white/96',
           isSideSeat ? 'min-w-[168px] sm:min-w-[205px]' : 'min-w-[215px] sm:min-w-[248px]'
         )}
       >
@@ -315,10 +310,10 @@ const SeatPlate: React.FC<{
               exit={{ opacity: 0, y: -42, scale: 0.7 }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className={cn(
-                'pointer-events-none absolute -top-2 left-3 z-30 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-semibold shadow-lg border',
+                'pointer-events-none absolute -top-2 left-3 z-30 flex items-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-semibold shadow-md border bg-white',
                 info.reactionIsWin
-                  ? 'bg-[#0B2E20] border-[#10B981]/60 text-[#34D399]'
-                  : 'bg-[#2A1215] border-[#F87171]/50 text-[#FCA5A5]'
+                  ? 'border-[#28B482] text-[#0E7C56]'
+                  : 'border-[#C81E1E] text-[#C81E1E]'
               )}
             >
               <span className="text-base leading-none">
@@ -335,13 +330,13 @@ const SeatPlate: React.FC<{
         <div className="relative shrink-0">
           <div
             className={cn(
-              'h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br flex items-center justify-center font-display font-bold text-base sm:text-lg shadow-lg ring-2',
+              'h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-gradient-to-br flex items-center justify-center font-display font-bold text-base sm:text-lg shadow-sm ring-2',
               AVATAR_TONES[info.seatIndex],
               info.isActive
-                ? 'ring-[#D99B26]'
+                ? 'ring-[#007272]'
                 : info.isTrickWinner
-                ? 'ring-[#10B981]'
-                : 'ring-white/20'
+                ? 'ring-[#28B482]'
+                : 'ring-[#D3DCDC]'
             )}
           >
             {info.playerType === 'bot' ? (
@@ -353,7 +348,7 @@ const SeatPlate: React.FC<{
           {info.isDealer && (
             <span
               title="Dealer"
-              className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-[#D99B26] text-[#0B1410] font-mono text-[10px] font-bold flex items-center justify-center ring-2 ring-[#0B1410]"
+              className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-[#007272] text-white font-mono text-[10px] font-bold flex items-center justify-center ring-2 ring-white"
             >
               D
             </span>
@@ -363,27 +358,27 @@ const SeatPlate: React.FC<{
         {/* Player Metadata & Score */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-1.5">
-            <span className="font-semibold text-xs sm:text-sm text-[#F4F1EA] truncate">
+            <span className="font-semibold text-xs sm:text-sm text-[#1C2B2B] truncate">
               {info.displayName}
               {info.isMe ? ' (You)' : ''}
             </span>
             {!info.connected && info.playerType === 'human' && (
-              <span className="text-[10px] font-medium text-[#F87171] shrink-0">
+              <span className="text-[10px] font-semibold text-[#C81E1E] shrink-0">
                 Offline
               </span>
             )}
           </div>
 
-          <div className="mt-0.5 flex items-center justify-between gap-2 text-xs text-[#9EB3A8] font-mono tabular-nums">
+          <div className="mt-0.5 flex items-center justify-between gap-2 text-xs text-[#556767] font-mono tabular-nums">
             <span>
               Bid:{' '}
-              <strong className="text-[#F4F1EA]">
+              <strong className="text-[#1C2B2B]">
                 {info.bid !== null ? info.bid : '—'}
               </strong>
-              <span className="mx-1 text-white/25">·</span>
-              Won: <strong className="text-[#34D399]">{info.tricksWon}</strong>
+              <span className="mx-1 text-[#D3DCDC]">·</span>
+              Won: <strong className="text-[#0E7C56]">{info.tricksWon}</strong>
             </span>
-            <span className="text-[#E2ECE7] font-semibold">
+            <span className="text-[#1C2B2B] font-bold">
               {formatScoreTenths(info.totalScoreTenths)}
             </span>
           </div>
@@ -391,17 +386,17 @@ const SeatPlate: React.FC<{
           <div className="mt-0.5 h-4 flex items-center justify-between text-[11px]">
             {info.isActive ? (
               <>
-                <span className="text-[#D99B26] font-medium">
+                <span className="text-[#007272] font-semibold">
                   {info.phase === 'BIDDING' ? 'Bidding…' : 'Playing…'}
                 </span>
                 {secondsLeft !== null && (
-                  <span className="font-mono text-[#D99B26] tabular-nums">
+                  <span className="font-mono font-semibold text-[#007272] tabular-nums">
                     {secondsLeft}s
                   </span>
                 )}
               </>
             ) : (
-              <span className="text-[#7E978B]">
+              <span className="text-[#556767]">
                 {info.playerType === 'bot' ? 'AI Player' : 'Seated'}
               </span>
             )}
@@ -562,19 +557,19 @@ const CenterArena: React.FC = React.memo(() => {
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.16 }}
-        className="w-full max-w-md rounded-xl border border-[#D99B26]/70 bg-[#0B1410]/95 p-3 sm:p-4 shadow-2xl"
+        className="w-full max-w-md rounded-xl border border-[#D3DCDC] bg-white p-4 sm:p-5 text-[#1C2B2B] shadow-2xl"
       >
-        <div className="flex items-center justify-between mb-2.5">
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="font-display text-sm sm:text-base font-semibold text-[#F4F1EA]">
+            <h2 className="font-display text-base sm:text-lg font-semibold text-[#1C2B2B]">
               Place Your Bid
             </h2>
-            <p className="text-[11px] sm:text-xs text-[#9EB3A8]">
-              Suggested bid: <strong className="text-[#D99B26] font-mono">{centerState.suggestedBid}</strong> · ♠ is trump
+            <p className="text-xs sm:text-sm text-[#4E5D5D]">
+              Suggested bid: <strong className="text-[#007272] font-mono">{centerState.suggestedBid}</strong> · ♠ is trump
             </p>
           </div>
           {secondsLeft !== null && (
-            <span className="font-mono text-xs font-semibold text-[#D99B26] tabular-nums">
+            <span className="font-mono text-sm font-semibold text-[#007272] tabular-nums">
               {secondsLeft}s
             </span>
           )}
@@ -589,10 +584,10 @@ const CenterArena: React.FC = React.memo(() => {
                 onClick={() => useGameStore.getState().submitBid(num)}
                 title={isSuggested ? `Suggested bid: ${num}` : undefined}
                 className={cn(
-                  'h-10 min-w-[42px] px-3 rounded-lg border font-mono text-sm sm:text-base font-bold transition-colors cursor-pointer',
+                  'h-10 min-w-[44px] px-3 rounded-lg border font-mono text-sm sm:text-base font-bold transition-colors cursor-pointer',
                   isSuggested
-                    ? 'border-[#D99B26] bg-[#D99B26] text-[#0B1410] ring-2 ring-[#F5C55C]/50 hover:bg-[#E8AC38]'
-                    : 'border-white/15 bg-[#15281E] text-[#F4F1EA] hover:bg-[#D99B26] hover:text-[#0B1410] hover:border-[#D99B26]'
+                    ? 'border-[#007272] bg-[#007272] text-white ring-2 ring-[#A5E1D2] hover:bg-[#005A5A]'
+                    : 'border-[#D3DCDC] bg-[#F2F4EC] text-[#1C2B2B] hover:bg-[#007272] hover:text-white hover:border-[#007272]'
                 )}
               >
                 {num}
@@ -606,15 +601,15 @@ const CenterArena: React.FC = React.memo(() => {
 
   return (
     <>
-      <div className="mb-1.5 text-center text-xs text-[#CFE0D7]">
+      <div className="mb-1.5 text-center text-xs sm:text-sm text-[#E8F6F2]">
         {centerState.phase === 'TRICK_COMPLETE' && centerState.winnerName ? (
-          <span className="font-semibold text-[#34D399]">
+          <span className="font-semibold text-[#A5E1D2]">
             {centerState.winnerName} won Trick {centerState.lastTrickNum}
           </span>
         ) : centerState.leadSuit ? (
           <span>
             Lead suit:{' '}
-            <strong>
+            <strong className="text-white">
               {SUIT_SYMBOLS[centerState.leadSuit]}{' '}
               {SUIT_NAMES[centerState.leadSuit]}
             </strong>
@@ -712,18 +707,18 @@ const PlayerHandBar: React.FC = React.memo(() => {
     <div className="relative z-20 shrink-0 w-full flex flex-col items-center pb-2.5 sm:pb-3.5 px-2 sm:px-6">
       <div className="mb-1.5 flex flex-wrap items-center justify-center gap-3">
         <SeatPlate pos="bottom" />
-        <div className="rounded-lg border border-white/10 bg-[#0B1410]/85 px-3 py-1.5 text-xs text-[#D1DDD7]">
+        <div className="rounded-lg border border-[#D3DCDC] bg-white/95 px-3.5 py-1.5 text-xs sm:text-sm text-[#334343] shadow-sm">
           {meta.isMyTurnToPlay ? (
-            <span className="font-semibold text-[#D99B26]">
+            <span className="font-semibold text-[#007272]">
               Your Turn · {meta.legalReason ?? 'Select a highlighted card'}
             </span>
           ) : meta.isMyTurnToBid ? (
-            <span className="font-semibold text-[#D99B26]">
+            <span className="font-semibold text-[#007272]">
               Your Turn · Choose your bid in the center
             </span>
           ) : meta.activeName ? (
             <span>
-              Waiting for <strong>{meta.activeName}</strong>…
+              Waiting for <strong className="text-[#1C2B2B]">{meta.activeName}</strong>…
             </span>
           ) : (
             <span>
@@ -782,7 +777,7 @@ const ChatDrawer: React.FC = React.memo(() => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 24 }}
           transition={{ duration: 0.16 }}
-          className="fixed inset-y-12 sm:inset-y-14 right-0 z-30 w-full max-w-sm lg:static lg:inset-auto lg:w-88 border-l border-white/10 bg-[#0D1812] p-2.5 flex flex-col"
+          className="fixed inset-y-13 sm:inset-y-14 right-0 z-30 w-full max-w-sm lg:static lg:inset-auto lg:w-88 border-l border-[#D3DCDC] bg-[#F2F4EC] p-2.5 flex flex-col"
         >
           <ChatPanel
             messages={messages}
@@ -824,13 +819,15 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
   useEffect(() => {
     if (phase === 'ROUND_COMPLETE' || phase === 'GAME_COMPLETE') {
       setScoreboardOpen(true);
+    } else if (phase === 'BIDDING') {
+      setScoreboardOpen(false);
     }
   }, [phase, currentRound]);
 
   if (!room) return null;
 
   return (
-    <div className="relative h-dvh w-screen overflow-hidden bg-[#08120D] text-[#F4F1EA] flex flex-col">
+    <div className="relative h-dvh w-screen overflow-hidden bg-[#003838] text-[#1C2B2B] flex flex-col">
       <TopHudBar
         onOpenScoreboard={() => setScoreboardOpen(true)}
         onOpenRules={() => setRulesOpen(true)}
@@ -838,8 +835,8 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
       />
 
       <div className="relative flex-1 min-h-0 flex overflow-hidden">
-        {/* Felt Card Table Canvas */}
-        <div className="relative flex-1 min-h-0 flex flex-col justify-between overflow-hidden bg-[radial-gradient(ellipse_at_center,#13623D_0%,#0B3C25_58%,#061B11_100%)]">
+        {/* Sea-Green Felt Card Table Canvas */}
+        <div className="relative flex-1 min-h-0 flex flex-col justify-between overflow-hidden bg-[radial-gradient(ellipse_at_center,#006666_0%,#004B4B_58%,#003131_100%)]">
           {!feltImageError && (
             <img
               src="/src/assets/images/table_felt_surface_1794510216671.jpg"
@@ -885,8 +882,14 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
         open={scoreboardOpen}
         onOpenChange={setScoreboardOpen}
         room={room}
-        onNextRound={() => useGameStore.getState().nextRound()}
-        onRestartGame={() => useGameStore.getState().restartGame()}
+        onNextRound={() => {
+          setScoreboardOpen(false);
+          useGameStore.getState().nextRound();
+        }}
+        onRestartGame={() => {
+          setScoreboardOpen(false);
+          useGameStore.getState().restartGame();
+        }}
       />
 
       <RulesModal open={rulesOpen} onOpenChange={setRulesOpen} />

@@ -20,10 +20,10 @@ interface HomeViewProps {
 }
 
 const HERO_CARDS = [
-  { code: '0D', label: '10 of Diamonds', rotate: '-11deg', translate: 'translate-y-3' },
-  { code: 'QH', label: 'Queen of Hearts', rotate: '-4deg', translate: 'translate-y-1' },
+  { code: '0D', label: '10 of Diamonds', rotate: '-10deg', translate: 'translate-y-3' },
+  { code: 'QH', label: 'Queen of Hearts', rotate: '-3.5deg', translate: 'translate-y-1' },
   { code: 'KS', label: 'King of Spades', rotate: '3deg', translate: 'translate-y-0' },
-  { code: 'AS', label: 'Ace of Spades', rotate: '10deg', translate: 'translate-y-2' },
+  { code: 'AS', label: 'Ace of Spades', rotate: '9.5deg', translate: 'translate-y-2' },
 ];
 
 const ROUND_OPTIONS: { value: '1' | '3' | '5'; label: string }[] = [
@@ -49,8 +49,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [joinCode, setJoinCode] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
-  const [feltLoaded, setFeltLoaded] = useState(false);
-  const [feltError, setFeltError] = useState(false);
 
   const handleCreate = async (fillBots: boolean) => {
     const cleanName = displayName.trim();
@@ -108,350 +106,332 @@ export const HomeView: React.FC<HomeViewProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen bg-[#07110C] text-[#F4F1EA] flex flex-col overflow-x-hidden">
-      {/* Subtle Parlor Felt Lamp Backdrop */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_50%_18%,rgba(19,92,58,0.42)_0%,rgba(9,32,21,0.85)_52%,rgba(6,13,9,1)_100%)]"
-      />
-      {!feltError && (
-        <img
-          src="/src/assets/images/table_felt_surface_1794510216671.jpg"
-          alt=""
-          aria-hidden="true"
-          onLoad={() => setFeltLoaded(true)}
-          onError={() => setFeltError(true)}
-          className={cn(
-            'pointer-events-none fixed inset-0 h-full w-full object-cover mix-blend-soft-light transition-opacity duration-500',
-            feltLoaded ? 'opacity-35' : 'opacity-0'
-          )}
-        />
-      )}
-
+    <div className="min-h-screen bg-white text-[#1C2B2B] flex flex-col">
       {/* Minimal Header */}
-      <header className="relative z-10 border-b border-white/8 bg-[#08130E]/80 backdrop-blur-md">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-14 flex items-center justify-between">
+      <header className="border-b border-[#D3DCDC] bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-8 h-16 flex items-center justify-between">
           <a
             href="/"
             className="flex items-baseline gap-2.5 whitespace-nowrap shrink-0"
           >
-            <span className="font-display text-xl font-bold tracking-tight text-[#F4F1EA]">
+            <span className="font-display text-2xl font-bold tracking-tight text-[#007272]">
               Call Break
             </span>
-            <span className="text-xs text-[#9EB3A8]">कल ब्रेक</span>
+            <span className="text-sm font-medium text-[#556767]">कल ब्रेक</span>
           </a>
           <span
             aria-hidden="true"
-            className="text-sm tracking-[0.35em] text-[#D99B26]/70 select-none"
+            className="text-base tracking-[0.35em] text-[#007272]/65 select-none"
           >
             ♠ ♥ ♦ ♣
           </span>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 mx-auto w-full max-w-5xl flex-1 px-4 sm:px-6 py-8 sm:py-14 space-y-16">
-        {/* Parlor Hero + Table Entry */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left: Authentic Playing Card Fan + Display Title */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
-            {/* Fanned Vector Playing Cards */}
-            <div className="relative flex items-center justify-center pt-2 pb-1">
-              <div className="flex items-end -space-x-7 sm:-space-x-8">
-                {HERO_CARDS.map((c) => (
-                  <div
-                    key={c.code}
-                    style={{ transform: `rotate(${c.rotate})` }}
-                    className={cn(
-                      'w-18 sm:w-22 aspect-[175/251] rounded-md bg-white border border-black/20 shadow-[0_14px_28px_rgba(0,0,0,0.55)] overflow-hidden transition-transform duration-200 hover:-translate-y-2',
-                      c.translate
-                    )}
-                  >
-                    <img
-                      src={`/cards/${c.code}.svg`}
-                      alt={c.label}
-                      draggable={false}
-                      className="h-full w-full object-contain block"
-                    />
-                  </div>
-                ))}
+      <main className="flex-1">
+        {/* Band 1: Soft Mint Hero + Crisp White Calculator-Style Room Card */}
+        <section className="bg-gradient-to-b from-[#E8F6F2] via-[#E8F6F2]/75 to-white py-10 sm:py-16">
+          <div className="mx-auto max-w-6xl px-4 sm:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left: Fanned Vector Playing Cards + 48px Display Heading */}
+            <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
+              <div className="relative flex items-center justify-center pt-2 pb-1">
+                <div className="flex items-end -space-x-7 sm:-space-x-8">
+                  {HERO_CARDS.map((c) => (
+                    <div
+                      key={c.code}
+                      style={{ transform: `rotate(${c.rotate})` }}
+                      className={cn(
+                        'w-20 sm:w-24 aspect-[175/251] rounded-md bg-white border border-[#D3DCDC] shadow-[0_12px_24px_rgba(0,70,70,0.14)] overflow-hidden transition-transform duration-200 hover:-translate-y-2',
+                        c.translate
+                      )}
+                    >
+                      <img
+                        src={`/cards/${c.code}.svg`}
+                        alt={c.label}
+                        draggable={false}
+                        className="h-full w-full object-contain block"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <p className="text-sm font-semibold text-[#007272]">
+                  4 Seats · 13 Tricks · Spades Trump
+                </p>
+                <h1 className="font-display text-4xl sm:text-[3rem] sm:leading-[3.5rem] font-semibold tracking-[-0.02em] text-[#1C2B2B]">
+                  Nepali Call Break, ready in one link.
+                </h1>
               </div>
             </div>
 
-            <div className="space-y-3">
-              <p className="text-xs font-mono uppercase tracking-[0.18em] text-[#D99B26]">
-                4 Seats · 13 Tricks · Spades Trump
-              </p>
-              <h1 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#F4F1EA] leading-[1.08]">
-                Nepali Call Break, ready in one link.
-              </h1>
-            </div>
-          </div>
+            {/* Right: Crisp Eufemia White Configurator Card */}
+            <div className="lg:col-span-7">
+              <div className="rounded-xl border border-[#D3DCDC] bg-white p-6 sm:p-8 shadow-[0_10px_32px_rgba(0,70,70,0.07)]">
+                <Tabs defaultValue="create" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="create">Create Room</TabsTrigger>
+                    <TabsTrigger value="join">Join by Code</TabsTrigger>
+                  </TabsList>
 
-          {/* Right: Brass-Rimmed Parlor Entry Panel */}
-          <div className="lg:col-span-7">
-            <div className="rounded-xl border border-[#D99B26]/28 bg-[#0B1913]/92 backdrop-blur-md p-5 sm:p-7 shadow-[0_24px_60px_rgba(0,0,0,0.55)]">
-              <Tabs defaultValue="create" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 bg-[#07110C] border border-white/10">
-                  <TabsTrigger value="create">Create Room</TabsTrigger>
-                  <TabsTrigger value="join">Join by Code</TabsTrigger>
-                </TabsList>
-
-                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5 sm:col-span-2">
-                    <Label
-                      htmlFor="table-entry-name"
-                      className="text-xs text-[#B8C9C0]"
-                    >
-                      Display Name
-                    </Label>
+                  <div className="mt-5 space-y-1.5">
+                    <Label htmlFor="table-entry-name">Display Name</Label>
                     <Input
                       id="table-entry-name"
                       placeholder="e.g., Suresh, Priya, Kiran"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       maxLength={24}
-                      className="bg-[#07110C]/90 border-white/14 h-10"
-                    />
-                  </div>
-                </div>
-
-                <TabsContent value="create" className="space-y-4 mt-4">
-                  <div className="space-y-1.5">
-                    <Label
-                      htmlFor="room-name"
-                      className="text-xs text-[#B8C9C0]"
-                    >
-                      Table Name{' '}
-                      <span className="text-[#789185]">(optional)</span>
-                    </Label>
-                    <Input
-                      id="room-name"
-                      placeholder="Friday Night Taas"
-                      value={roomName}
-                      onChange={(e) => setRoomName(e.target.value)}
-                      maxLength={36}
-                      className="bg-[#07110C]/90 border-white/14 h-10"
                     />
                   </div>
 
-                  {/* Tactile Inline Segmented Controls */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <TabsContent value="create" className="space-y-5 mt-5">
                     <div className="space-y-1.5">
-                      <Label className="text-xs text-[#B8C9C0]">Rounds</Label>
-                      <div className="grid grid-cols-3 gap-1 rounded-lg bg-[#07110C] p-1 border border-white/10">
-                        {ROUND_OPTIONS.map((opt) => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => setRounds(opt.value)}
-                            className={cn(
-                              'h-8 rounded-md text-xs font-medium transition-colors cursor-pointer',
-                              rounds === opt.value
-                                ? 'bg-[#183326] text-[#F4F1EA] border border-[#D99B26]/50'
-                                : 'text-[#8CA498] hover:text-[#F4F1EA]'
-                            )}
-                          >
-                            {opt.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <Label className="text-xs text-[#B8C9C0]">Bot AI</Label>
-                      <div className="grid grid-cols-3 gap-1 rounded-lg bg-[#07110C] p-1 border border-white/10">
-                        {BOT_OPTIONS.map((opt) => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => setBotDifficulty(opt.value)}
-                            className={cn(
-                              'h-8 rounded-md text-xs font-medium transition-colors cursor-pointer',
-                              botDifficulty === opt.value
-                                ? 'bg-[#183326] text-[#F4F1EA] border border-[#D99B26]/50'
-                                : 'text-[#8CA498] hover:text-[#F4F1EA]'
-                            )}
-                          >
-                            {opt.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                    <Button
-                      size="lg"
-                      className="flex-1 font-semibold"
-                      disabled={isCreating}
-                      onClick={() => handleCreate(false)}
-                    >
-                      Create Invite Room
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="lg"
-                      variant="secondary"
-                      className="flex-1 bg-[#14271E] hover:bg-[#1B3529] border border-white/10"
-                      disabled={isCreating}
-                      onClick={() => handleCreate(true)}
-                    >
-                      <Bot className="h-4 w-4 text-[#D99B26]" />
-                      Play vs 3 Bots
-                    </Button>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="join" className="mt-4">
-                  <form onSubmit={handleJoinSubmit} className="space-y-4">
-                    <div className="space-y-1.5">
-                      <Label
-                        htmlFor="join-code"
-                        className="text-xs text-[#B8C9C0]"
-                      >
-                        Room Code
+                      <Label htmlFor="room-name">
+                        Table Name{' '}
+                        <span className="font-normal text-[#556767]">
+                          (optional)
+                        </span>
                       </Label>
                       <Input
-                        id="join-code"
-                        placeholder="ABCD12"
-                        value={joinCode}
-                        onChange={(e) =>
-                          setJoinCode(e.target.value.toUpperCase())
-                        }
-                        maxLength={8}
-                        className="bg-[#07110C]/90 border-white/14 h-10 font-mono uppercase tracking-[0.25em]"
+                        id="room-name"
+                        placeholder="Friday Night Taas"
+                        value={roomName}
+                        onChange={(e) => setRoomName(e.target.value)}
+                        maxLength={36}
                       />
                     </div>
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="w-full font-semibold"
-                    >
-                      Enter Table Lobby
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </form>
-                </TabsContent>
-              </Tabs>
 
-              <div className="mt-5 pt-3.5 border-t border-white/8 flex items-center justify-between text-xs text-[#8CA498]">
-                <span>52 cards · Counterclockwise play · Server-authoritative</span>
-                <button
-                  type="button"
-                  onClick={() => setRulesOpen(true)}
-                  className="text-[#D99B26] hover:underline cursor-pointer shrink-0 ml-2"
-                >
-                  Rules
-                </button>
+                    {/* Tactile Segmented Controls */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <Label>Rounds</Label>
+                        <div className="grid grid-cols-3 gap-1 rounded-lg bg-[#F2F4EC] p-1 border border-[#D3DCDC]">
+                          {ROUND_OPTIONS.map((opt) => (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => setRounds(opt.value)}
+                              className={cn(
+                                'h-9 rounded-md text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap',
+                                rounds === opt.value
+                                  ? 'bg-[#007272] text-white shadow-xs'
+                                  : 'text-[#334343] hover:text-[#004646]'
+                              )}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label>Bot AI</Label>
+                        <div className="grid grid-cols-3 gap-1 rounded-lg bg-[#F2F4EC] p-1 border border-[#D3DCDC]">
+                          {BOT_OPTIONS.map((opt) => (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => setBotDifficulty(opt.value)}
+                              className={cn(
+                                'h-9 rounded-md text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap',
+                                botDifficulty === opt.value
+                                  ? 'bg-[#007272] text-white shadow-xs'
+                                  : 'text-[#334343] hover:text-[#004646]'
+                              )}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Live Configuration Summary Strip */}
+                    <div className="rounded-lg bg-[#F2F4EC] border border-[#D3DCDC] px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+                      <span className="text-[#4E5D5D]">Selected table setup</span>
+                      <span className="font-semibold text-[#1C2B2B] tabular-nums">
+                        {rounds} {Number(rounds) === 1 ? 'Round' : 'Rounds'} ·{' '}
+                        <span className="capitalize">{botDifficulty}</span> Bot AI
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Button
+                        size="lg"
+                        className="flex-1"
+                        disabled={isCreating}
+                        onClick={() => handleCreate(false)}
+                      >
+                        Create Invite Room
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        className="flex-1"
+                        disabled={isCreating}
+                        onClick={() => handleCreate(true)}
+                      >
+                        <Bot className="h-4 w-4" />
+                        Play vs 3 Bots
+                      </Button>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="join" className="mt-5">
+                    <form onSubmit={handleJoinSubmit} className="space-y-5">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="join-code">Room Code</Label>
+                        <Input
+                          id="join-code"
+                          placeholder="ABCD12"
+                          value={joinCode}
+                          onChange={(e) =>
+                            setJoinCode(e.target.value.toUpperCase())
+                          }
+                          maxLength={8}
+                          className="font-mono uppercase tracking-[0.25em]"
+                        />
+                      </div>
+                      <Button type="submit" size="lg" className="w-full">
+                        Enter Table Lobby
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </form>
+                  </TabsContent>
+                </Tabs>
+
+                <div className="mt-6 pt-4 border-t border-[#D3DCDC] flex items-center justify-between text-sm text-[#556767]">
+                  <span>52 cards · Counterclockwise play · Live multiplayer</span>
+                  <button
+                    type="button"
+                    onClick={() => setRulesOpen(true)}
+                    className="font-semibold text-[#007272] hover:underline cursor-pointer shrink-0 ml-3"
+                  >
+                    Rules
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* House Scoring & Bot Reference Ledger */}
+        {/* Band 2: Pistachio Surface with Crisp White Modular Reference Cards */}
         <section
           id="scoring"
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-white/10"
+          className="bg-[#F2F4EC] border-t border-[#D3DCDC] py-12 sm:py-16"
         >
-          <div className="space-y-3">
-            <h2 className="font-display text-xl font-semibold text-[#F4F1EA]">
-              Fractional Scoring
-            </h2>
-            <p className="text-sm text-[#A5BBB0] leading-relaxed">
-              Meet your bid to earn <span className="font-mono text-[#F4F1EA]">+0.1</span> per
-              overtrick. Fall short by even one trick and your entire bid is deducted.
-            </p>
-            <div className="rounded-lg border border-white/10 bg-[#0B1913]/80 overflow-hidden">
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b border-white/10 text-[#8CA498]">
-                  <tr>
-                    <th className="px-4 py-2 font-medium">Bid</th>
-                    <th className="px-4 py-2 font-medium">Won</th>
-                    <th className="px-4 py-2 font-medium text-right">Score</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/8 font-mono tabular-nums">
-                  <tr>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2 text-right text-[#34D399]">+3.0</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2">5</td>
-                    <td className="px-4 py-2 text-right text-[#34D399]">+3.2</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2">4</td>
-                    <td className="px-4 py-2">2</td>
-                    <td className="px-4 py-2 text-right text-[#F87171]">-4.0</td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className="mx-auto max-w-6xl px-4 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-xl border border-[#D3DCDC] bg-white p-6 sm:p-8 space-y-4">
+              <h2 className="font-display text-2xl font-semibold text-[#1C2B2B]">
+                Fractional Scoring
+              </h2>
+              <p className="text-base text-[#334343] leading-relaxed">
+                Meet your bid to earn{' '}
+                <span className="font-mono font-semibold text-[#007272]">+0.1</span>{' '}
+                per overtrick. Fall short by even one trick and your entire bid is deducted.
+              </p>
+              <div className="rounded-lg border border-[#D3DCDC] bg-white overflow-hidden">
+                <table className="w-full text-left text-base">
+                  <thead className="bg-[#F2F4EC] border-b border-[#D3DCDC] text-sm text-[#4E5D5D]">
+                    <tr>
+                      <th className="px-4 py-2.5 font-semibold">Bid</th>
+                      <th className="px-4 py-2.5 font-semibold">Won</th>
+                      <th className="px-4 py-2.5 font-semibold text-right">Score</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#E4EAEA] font-mono tabular-nums">
+                    <tr>
+                      <td className="px-4 py-2.5">3</td>
+                      <td className="px-4 py-2.5">3</td>
+                      <td className="px-4 py-2.5 text-right font-semibold text-[#0E7C56]">
+                        +3.0
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5">3</td>
+                      <td className="px-4 py-2.5">5</td>
+                      <td className="px-4 py-2.5 text-right font-semibold text-[#0E7C56]">
+                        +3.2
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5">4</td>
+                      <td className="px-4 py-2.5">2</td>
+                      <td className="px-4 py-2.5 text-right font-semibold text-[#C81E1E]">
+                        -4.0
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
-          <div id="bots" className="space-y-3">
-            <h2 className="font-display text-xl font-semibold text-[#F4F1EA]">
-              AI Table Partners
-            </h2>
-            <p className="text-sm text-[#A5BBB0] leading-relaxed">
-              Bots fill any vacant seats, play purely from public trick history without
-              peeking at hidden hands, and chat back when you ping them.
-            </p>
-            <dl className="divide-y divide-white/10 rounded-lg border border-white/10 bg-[#0B1913]/80 px-4">
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-sm font-semibold text-[#F4F1EA] shrink-0">
-                  Easy
-                </dt>
-                <dd className="text-xs text-[#9EB3A8] text-right">
-                  Relaxed high-card play for casual rounds
-                </dd>
-              </div>
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-sm font-semibold text-[#F4F1EA] shrink-0">
-                  Medium
-                </dt>
-                <dd className="text-xs text-[#9EB3A8] text-right">
-                  Tracks Aces and spades to protect bids
-                </dd>
-              </div>
-              <div className="py-2.5 flex items-baseline justify-between gap-4">
-                <dt className="text-sm font-semibold text-[#D99B26] shrink-0">
-                  Hard
-                </dt>
-                <dd className="text-xs text-[#9EB3A8] text-right">
-                  Infers suit voids and runs Monte Carlo rollouts
-                </dd>
-              </div>
-            </dl>
+            <div
+              id="bots"
+              className="rounded-xl border border-[#D3DCDC] bg-white p-6 sm:p-8 space-y-4"
+            >
+              <h2 className="font-display text-2xl font-semibold text-[#1C2B2B]">
+                AI Table Partners
+              </h2>
+              <p className="text-base text-[#334343] leading-relaxed">
+                Bots fill any vacant seats, play purely from public trick history
+                without peeking at hidden hands, and chat back when you ping them.
+              </p>
+              <dl className="divide-y divide-[#E4EAEA] rounded-lg border border-[#D3DCDC] bg-white px-5">
+                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+                  <dt className="text-base font-semibold text-[#1C2B2B] shrink-0">
+                    Easy
+                  </dt>
+                  <dd className="text-sm sm:text-base text-[#4E5D5D] sm:text-right">
+                    Relaxed high-card play for casual rounds
+                  </dd>
+                </div>
+                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+                  <dt className="text-base font-semibold text-[#1C2B2B] shrink-0">
+                    Medium
+                  </dt>
+                  <dd className="text-sm sm:text-base text-[#4E5D5D] sm:text-right">
+                    Tracks Aces and spades to protect bids
+                  </dd>
+                </div>
+                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
+                  <dt className="text-base font-semibold text-[#007272] shrink-0">
+                    Hard
+                  </dt>
+                  <dd className="text-sm sm:text-base text-[#4E5D5D] sm:text-right">
+                    Infers suit voids and runs Monte Carlo rollouts
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="relative z-10 border-t border-white/8 bg-[#08130E]/90">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-14 flex items-center justify-between gap-6 text-sm text-[#9EB3A8]">
-          <span className="font-display font-semibold text-[#F4F1EA]">
-            Call Break
-          </span>
-          <nav className="flex items-center gap-6">
+      {/* Clean Footer with Rules, Scoring, Bot AI at bottom */}
+      <footer className="border-t border-[#D3DCDC] bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-8 h-16 flex items-center justify-between gap-6 text-base text-[#4E5D5D]">
+          <span className="font-display font-bold text-[#007272]">Call Break</span>
+          <nav className="flex items-center gap-6 sm:gap-8 font-medium">
             <button
               type="button"
               onClick={() => setRulesOpen(true)}
-              className="hover:text-white transition-colors whitespace-nowrap cursor-pointer"
+              className="text-[#334343] hover:text-[#007272] hover:underline transition-colors whitespace-nowrap cursor-pointer"
             >
               Rules
             </button>
             <a
               href="#scoring"
-              className="hover:text-white transition-colors whitespace-nowrap"
+              className="text-[#334343] hover:text-[#007272] hover:underline transition-colors whitespace-nowrap"
             >
               Scoring
             </a>
             <a
               href="#bots"
-              className="hover:text-white transition-colors whitespace-nowrap"
+              className="text-[#334343] hover:text-[#007272] hover:underline transition-colors whitespace-nowrap"
             >
               Bot AI
             </a>

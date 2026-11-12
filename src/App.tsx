@@ -143,12 +143,12 @@ function AppContent() {
       !lastError
     ) {
       return (
-        <div className="min-h-screen bg-[#0B1410] text-[#F4F1EA] flex items-center justify-center p-6">
-          <div className="text-center space-y-2">
-            <p className="font-display text-xl font-semibold">
+        <div className="min-h-screen bg-[#F2F4EC] text-[#1C2B2B] flex items-center justify-center p-6">
+          <div className="rounded-xl border border-[#D3DCDC] bg-white px-8 py-6 text-center space-y-2 shadow-sm">
+            <p className="font-display text-xl font-semibold text-[#1C2B2B]">
               Connecting to Room {routeRoomCode}…
             </p>
-            <p className="text-xs text-[#9EB3A8]">
+            <p className="text-sm text-[#556767]">
               Synchronizing authoritative table state
             </p>
           </div>
@@ -202,7 +202,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AppContent />
-        <Toaster theme="dark" position="top-center" richColors />
+        <Toaster theme="light" position="top-center" richColors />
       </TooltipProvider>
     </QueryClientProvider>
   );

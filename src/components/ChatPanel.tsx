@@ -60,20 +60,20 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   return (
     <div
       className={cn(
-        'flex flex-col rounded-xl border border-white/12 bg-[#0F1C16] text-[#F4F1EA] overflow-hidden',
+        'flex flex-col rounded-xl border border-[#D3DCDC] bg-white text-[#1C2B2B] overflow-hidden',
         className
       )}
     >
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-[#D3DCDC] bg-[#F2F4EC]/60">
         <div>
-          <h3 className="text-sm font-semibold text-[#F4F1EA]">Table Chat</h3>
-          <p className="text-[11px] text-[#8DA499]">Live room messages</p>
+          <h3 className="text-base font-semibold text-[#1C2B2B]">Table Chat</h3>
+          <p className="text-xs text-[#556767]">Live room messages</p>
         </div>
         {onClose && (
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1.5 text-[#9EB3A8] hover:bg-white/10 hover:text-white cursor-pointer"
+            className="rounded-md p-1.5 text-[#556767] hover:bg-[#E8F6F2] hover:text-[#004646] cursor-pointer"
             aria-label="Close chat"
           >
             <X className="h-4 w-4" />
@@ -82,13 +82,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       </div>
 
       {/* Message stream */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-2.5 min-h-[200px]">
+      <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-3 min-h-[200px]">
         {messages.map((msg) => {
           if (msg.kind === 'system') {
             return (
               <div
                 key={msg.id}
-                className="text-center text-[11px] text-[#8DA499] py-0.5"
+                className="text-center text-xs text-[#556767] py-0.5"
               >
                 {msg.text}
               </div>
@@ -104,8 +104,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 isMe ? 'ml-auto items-end' : 'mr-auto items-start'
               )}
             >
-              <div className="flex items-center gap-1.5 text-[11px] text-[#8DA499] mb-0.5">
-                <span className="font-medium text-[#C5D4CC]">
+              <div className="flex items-center gap-1.5 text-xs text-[#556767] mb-1">
+                <span className="font-semibold text-[#334343]">
                   {isMe ? 'You' : msg.senderName}
                 </span>
                 <span aria-hidden="true">·</span>
@@ -118,10 +118,10 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               </div>
               <div
                 className={cn(
-                  'rounded-lg px-3 py-1.5 text-xs sm:text-sm break-words',
+                  'rounded-lg px-3.5 py-2 text-sm break-words',
                   isMe
-                    ? 'bg-[#D99B26] text-[#0B1410] font-medium'
-                    : 'bg-[#192D24] text-[#F4F1EA] border border-white/8'
+                    ? 'bg-[#007272] text-white font-medium'
+                    : 'bg-[#F2F4EC] text-[#1C2B2B] border border-[#D3DCDC]'
                 )}
               >
                 {msg.text}
@@ -133,7 +133,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       </div>
 
       {/* Typing indicator */}
-      <div className="h-5 px-4 flex items-center text-[11px] text-[#9EB3A8]">
+      <div className="h-5 px-4 flex items-center text-xs text-[#007272] font-medium">
         {activeTypers.length > 0 && (
           <span>
             {activeTypers.map((t) => t.displayName).join(', ')}{' '}
@@ -143,13 +143,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       </div>
 
       {/* Quick chat replies */}
-      <div className="px-3 pb-2 flex items-center gap-1.5 overflow-x-auto">
+      <div className="px-3 pb-2.5 flex items-center gap-1.5 overflow-x-auto">
         {QUICK_REPLIES.map((phrase) => (
           <button
             key={phrase}
             type="button"
             onClick={() => onSendMessage(phrase)}
-            className="whitespace-nowrap shrink-0 rounded-md border border-white/10 bg-[#15271E] px-2.5 py-1 text-[11px] text-[#C5D4CC] hover:bg-[#1D3529] hover:text-white transition-colors cursor-pointer"
+            className="whitespace-nowrap shrink-0 rounded-md border border-[#D3DCDC] bg-[#F2F4EC] px-3 py-1 text-xs font-medium text-[#1C2B2B] hover:bg-[#E8F6F2] hover:border-[#007272] hover:text-[#004646] transition-colors cursor-pointer"
           >
             {phrase}
           </button>
@@ -159,16 +159,16 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       {/* Composer */}
       <form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 border-t border-white/10 p-2.5 bg-[#0B1410]"
+        className="flex items-center gap-2 border-t border-[#D3DCDC] p-2.5 bg-[#F2F4EC]/50"
       >
         <Input
           value={draft}
           onChange={(e) => handleDraftChange(e.target.value)}
           placeholder="Message the table…"
           maxLength={300}
-          className="h-9 text-xs sm:text-sm"
+          className="h-10 text-sm"
         />
-        <Button type="submit" size="icon" className="h-9 w-9 shrink-0" aria-label="Send message">
+        <Button type="submit" size="icon" className="h-10 w-10 shrink-0" aria-label="Send message">
           <Send className="h-4 w-4" />
         </Button>
       </form>

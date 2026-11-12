@@ -83,14 +83,14 @@ const PlayingCardInner: React.FC<PlayingCardProps> = ({
       }}
       title={title ?? formatCardLabel(card)}
       className={cn(
-        'relative select-none aspect-[175/251] rounded-md overflow-visible bg-transparent transition-transform duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D99B26]',
+        'relative select-none aspect-[175/251] rounded-md overflow-visible bg-transparent transition-transform duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#A5E1D2]',
         compact
           ? 'w-14 sm:w-18 md:w-20 shrink-0'
           : 'flex-1 min-w-0 max-w-[96px]',
         hoverPop && 'hover:-translate-y-4 hover:scale-[1.08] hover:z-40',
         playable
-          ? 'cursor-pointer drop-shadow-[0_8px_16px_rgba(0,0,0,0.55)] hover:-translate-y-5 hover:scale-110 hover:z-40 hover:drop-shadow-[0_14px_24px_rgba(217,155,38,0.45)] active:translate-y-0 active:scale-95'
-          : 'drop-shadow-[0_5px_12px_rgba(0,0,0,0.45)]',
+          ? 'cursor-pointer drop-shadow-[0_8px_16px_rgba(0,0,0,0.45)] hover:-translate-y-5 hover:scale-110 hover:z-40 hover:drop-shadow-[0_14px_24px_rgba(165,225,210,0.5)] active:translate-y-0 active:scale-95'
+          : 'drop-shadow-[0_5px_12px_rgba(0,0,0,0.38)]',
         !playable && !onPlayCardId && !hoverPop && 'cursor-default',
         dimmed && !playable && 'brightness-65 saturate-75 cursor-not-allowed',
         selected && '-translate-y-3',
@@ -100,9 +100,9 @@ const PlayingCardInner: React.FC<PlayingCardProps> = ({
       <div
         className={cn(
           'h-full w-full rounded-md overflow-hidden bg-white border border-black/15',
-          playable && 'ring-2 ring-[#D99B26] border-transparent',
+          playable && 'ring-2 ring-[#A5E1D2] border-transparent',
           winning &&
-            'ring-2 ring-[#10B981] border-transparent shadow-[0_0_24px_rgba(16,185,129,0.55)]'
+            'ring-2 ring-[#28B482] border-transparent shadow-[0_0_24px_rgba(40,180,130,0.55)]'
         )}
       >
         {!imgError ? (
@@ -178,15 +178,15 @@ export const CardBack: React.FC<{ className?: string }> = React.memo(
               height="14"
               patternUnits="userSpaceOnUse"
             >
-              <rect width="14" height="14" fill="#183A6E" />
+              <rect width="14" height="14" fill="#005A5A" />
               <path
                 d="M7 1 L13 7 L7 13 L1 7 Z"
                 fill="none"
-                stroke="#D99B26"
+                stroke="#A5E1D2"
                 strokeWidth="1.2"
-                strokeOpacity="0.65"
+                strokeOpacity="0.7"
               />
-              <circle cx="7" cy="7" r="1.5" fill="#F4F1EA" fillOpacity="0.7" />
+              <circle cx="7" cy="7" r="1.4" fill="#FFFFFF" fillOpacity="0.75" />
             </pattern>
           </defs>
           <rect width="100" height="146" rx="4" fill="url(#cb-dhaka-back)" />
@@ -197,7 +197,7 @@ export const CardBack: React.FC<{ className?: string }> = React.memo(
             height="138"
             rx="3"
             fill="none"
-            stroke="#D99B26"
+            stroke="#A5E1D2"
             strokeWidth="2"
             strokeOpacity="0.85"
           />
