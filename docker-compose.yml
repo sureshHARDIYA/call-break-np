@@ -3,47 +3,39 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    expose:
+      - "3000"
     environment:
       NODE_ENV: production
       PORT: "3000"
-      REDIS_URL: redis://redis:6379
-      POSTGRES_URL: postgresql://callbreak:callbreak@postgres:5432/callbreak
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
     volumes:
       - app_data:/app/data
 
-  postgres:
-    image: postgres:16-alpine
+  # Terminates HTTPS (automatic Let's Encrypt certificate) and proxies HTTP + WebSocket to the app.
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
     environment:
-      POSTGRES_USER: callbreak
-      POSTGRES_PASSWORD: callbreak
-      POSTGRES_DB: callbreak
-    ports:
-      - "5432:5432"
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env, e.g. callbreak.example.com or 203.0.113.7.sslip.io}
     volumes:
-      - pg_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U callbreak"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
 
 volumes:
-  pg_data:
   app_data:
+  caddy_data:
+  caddy_config:

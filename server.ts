@@ -5,7 +5,13 @@ import express from 'express';
 import { WebSocketServer } from 'ws';
 import { z } from 'zod';
 import { RoomSettingsSchema } from './src/engine/protocol.ts';
+import { createRateLimiter } from './server/rateLimit.ts';
 import { roomManager } from './server/roomManager.ts';
+
+const JSON_BODY_LIMIT = '10kb';
+const WS_MAX_PAYLOAD_BYTES = 16 * 1024;
+const ROOM_CREATE_WINDOW_MS = 60_000;
+const ROOM_CREATE_MAX_PER_WINDOW = 10;
 
 const CreateRoomBodySchema = z.object({
   displayName: z.string().trim().min(1).max(24),
@@ -16,13 +22,21 @@ const CreateRoomBodySchema = z.object({
 
 async function startServer() {
   const app = express();
-  app.use(express.json());
+  app.disable('x-powered-by');
+  // One reverse proxy (Caddy) sits in front in production; use its X-Forwarded-For for req.ip.
+  app.set('trust proxy', 1);
+  app.use(express.json({ limit: JSON_BODY_LIMIT }));
+
+  const roomCreateLimiter = createRateLimiter({
+    windowMs: ROOM_CREATE_WINDOW_MS,
+    max: ROOM_CREATE_MAX_PER_WINDOW,
+  });
 
   app.get('/api/health', (_req, res) => {
     res.json({ ok: true, service: 'call-break-server', timestamp: Date.now() });
   });
 
-  app.post('/api/rooms', (req, res) => {
+  app.post('/api/rooms', roomCreateLimiter, (req, res) => {
     const parsed = CreateRoomBodySchema.safeParse(req.body);
     if (!parsed.success) {
       res.status(400).json({
@@ -45,7 +59,11 @@ async function startServer() {
   });
 
   const server = http.createServer(app);
-  const wss = new WebSocketServer({ server, path: '/ws' });
+  const wss = new WebSocketServer({
+    server,
+    path: '/ws',
+    maxPayload: WS_MAX_PAYLOAD_BYTES,
+  });
 
   wss.on('connection', (ws) => {
     (ws as unknown as { isAlive: boolean }).isAlive = true;
