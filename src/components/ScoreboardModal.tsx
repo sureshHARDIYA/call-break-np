@@ -18,6 +18,8 @@ interface ScoreboardModalProps {
   room: ClientRoomView;
   onNextRound: () => void;
   onRestartGame: () => void;
+  /** Returns to the final podium; only used once the match is over. */
+  onShowResults: () => void;
 }
 
 export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
@@ -26,6 +28,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
   room,
   onNextRound,
   onRestartGame,
+  onShowResults,
 }) => {
   const isRoundComplete = room.phase === 'ROUND_COMPLETE';
   const isGameComplete = room.phase === 'GAME_COMPLETE';
@@ -48,11 +51,11 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="max-w-3xl"
-        hideClose={isRoundComplete || isGameComplete}
+        hideClose={isRoundComplete}
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2.5">
-            {isGameComplete && <Trophy className="h-6 w-6 text-[#007272]" />}
+            {isGameComplete && <Trophy className="h-6 w-6 text-brand-ink" />}
             {isGameComplete
               ? `Match Complete — ${winnerNames} ${
                   room.winnerSeats.length > 1 ? 'Share Victory' : 'Wins'
@@ -95,11 +98,11 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 className={cn(
                   'rounded-lg border p-3.5',
                   isWinner
-                    ? 'border-[#007272] bg-[#E8F6F2]'
-                    : 'border-[#D3DCDC] bg-[#F2F4EC]/70'
+                    ? 'border-brand-ink bg-tint'
+                    : 'border-line bg-surface-muted/70'
                 )}
               >
-                <div className="flex items-center justify-between text-xs font-semibold text-[#556767]">
+                <div className="flex items-center justify-between text-xs font-semibold text-ink-muted">
                   <span>#{idx + 1}</span>
                   <div className="flex items-center gap-1.5">
                     {reactionEmoji && (
@@ -114,11 +117,11 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                       </span>
                     )}
                     {isWinner && (
-                      <span className="font-semibold text-[#007272]">Winner</span>
+                      <span className="font-semibold text-brand-ink">Winner</span>
                     )}
                   </div>
                 </div>
-                <div className="mt-1 font-semibold text-base text-[#1C2B2B] truncate">
+                <div className="mt-1 font-semibold text-base text-ink truncate">
                   {seat.displayName}
                   {seat.seat === room.mySeat ? ' (You)' : ''}
                 </div>
@@ -126,10 +129,10 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                   className={cn(
                     'mt-1 font-mono text-xl font-bold tabular-nums',
                     seat.totalScoreTenths > 0
-                      ? 'text-[#0E7C56]'
+                      ? 'text-positive'
                       : seat.totalScoreTenths < 0
-                      ? 'text-[#C81E1E]'
-                      : 'text-[#1C2B2B]'
+                      ? 'text-danger-ink'
+                      : 'text-ink'
                   )}
                 >
                   {formatScoreTenths(seat.totalScoreTenths)}
@@ -140,9 +143,9 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
         </div>
 
         {/* Round-by-round breakdown table */}
-        <div className="overflow-x-auto rounded-lg border border-[#D3DCDC] bg-white">
+        <div className="overflow-x-auto rounded-lg border border-line bg-surface">
           <table className="w-full text-left text-sm sm:text-base">
-            <thead className="bg-[#F2F4EC] border-b border-[#D3DCDC] text-sm text-[#4E5D5D]">
+            <thead className="bg-surface-muted border-b border-line text-sm text-ink-3">
               <tr>
                 <th className="px-3.5 py-2.5 font-semibold">Round</th>
                 {room.seats.map((seat) => (
@@ -154,12 +157,12 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E4EAEA] font-mono tabular-nums">
+            <tbody className="divide-y divide-line-soft font-mono tabular-nums">
               {room.roundHistory.length === 0 ? (
                 <tr>
                   <td
                     colSpan={5}
-                    className="px-3.5 py-6 text-center font-sans text-sm text-[#556767]"
+                    className="px-3.5 py-6 text-center font-sans text-sm text-ink-muted"
                   >
                     Round scores will appear here once Round 1 concludes.
                   </td>
@@ -167,7 +170,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
               ) : (
                 room.roundHistory.map((round) => (
                   <tr key={round.roundNumber}>
-                    <td className="px-3.5 py-2.5 text-[#556767]">R{round.roundNumber}</td>
+                    <td className="px-3.5 py-2.5 text-ink-muted">R{round.roundNumber}</td>
                     {room.seats.map((seat) => {
                       const res = round.results.find((r) => r.seat === seat.seat);
                       if (!res) return <td key={seat.seat} className="px-3.5 py-2.5">—</td>;
@@ -177,13 +180,13 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                             className={cn(
                               'font-semibold',
                               res.roundScoreTenths >= 0
-                                ? 'text-[#0E7C56]'
-                                : 'text-[#C81E1E]'
+                                ? 'text-positive'
+                                : 'text-danger-ink'
                             )}
                           >
                             {formatScoreTenths(res.roundScoreTenths)}
                           </span>
-                          <span className="ml-1.5 text-xs text-[#556767]">
+                          <span className="ml-1.5 text-xs text-ink-muted">
                             ({res.tricksWon}/{res.bid})
                           </span>
                         </td>
@@ -193,9 +196,9 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 ))
               )}
             </tbody>
-            <tfoot className="border-t border-[#D3DCDC] bg-[#F2F4EC] font-mono tabular-nums">
+            <tfoot className="border-t border-line bg-surface-muted font-mono tabular-nums">
               <tr>
-                <td className="px-3.5 py-2.5 font-sans text-sm font-semibold text-[#1C2B2B]">
+                <td className="px-3.5 py-2.5 font-sans text-sm font-semibold text-ink">
                   Total
                 </td>
                 {room.seats.map((seat) => (
@@ -204,10 +207,10 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                     className={cn(
                       'px-3.5 py-2.5 font-bold',
                       seat.totalScoreTenths > 0
-                        ? 'text-[#0E7C56]'
+                        ? 'text-positive'
                         : seat.totalScoreTenths < 0
-                        ? 'text-[#C81E1E]'
-                        : 'text-[#1C2B2B]'
+                        ? 'text-danger-ink'
+                        : 'text-ink'
                     )}
                   >
                     {formatScoreTenths(seat.totalScoreTenths)}
@@ -227,10 +230,17 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
-              <span className="text-sm text-[#556767]">
+              <span className="text-sm text-ink-muted">
                 Waiting for host to deal Round {room.currentRound + 1}…
               </span>
             )
+          )}
+
+          {isGameComplete && (
+            <Button variant="secondary" onClick={onShowResults}>
+              <Trophy className="h-4 w-4" />
+              Final results
+            </Button>
           )}
 
           {isGameComplete && (
@@ -240,7 +250,7 @@ export const ScoreboardModal: React.FC<ScoreboardModalProps> = ({
                 Play Again
               </Button>
             ) : (
-              <span className="text-sm text-[#556767]">
+              <span className="text-sm text-ink-muted">
                 Waiting for host to start a new match…
               </span>
             )

@@ -15,6 +15,9 @@
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- Applies a saved light/dark choice before first paint (kept external for the CSP). -->
+    <script src="/theme-init.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,7 +25,7 @@
       rel="stylesheet"
     />
   </head>
-  <body class="bg-white text-[#1C2B2B] antialiased selection:bg-[#A5E1D2]/60 selection:text-[#004646]">
+  <body class="bg-canvas text-ink antialiased selection:bg-mint/60 selection:text-brand-ink-strong">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

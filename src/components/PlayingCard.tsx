@@ -20,20 +20,20 @@ function toCardCode(rank: Rank, suit: Suit): string {
   return `${rankMap[rank] ?? String(rank)}${suitMap[suit]}`;
 }
 
-let deckPreloaded = false;
+// Holding the Image objects keeps the decoded cards in memory, so a freshly
+// dealt hand paints in one frame instead of popping in card by card.
+const preloadedDeck: HTMLImageElement[] = [];
 export function preloadDeckAssets(): void {
-  if (deckPreloaded || typeof window === 'undefined') return;
-  deckPreloaded = true;
+  if (preloadedDeck.length > 0 || typeof window === 'undefined') return;
   const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K', 'A'];
   const suits = ['S', 'H', 'D', 'C'];
   for (const s of suits) {
     for (const r of ranks) {
       const img = new Image();
       img.src = `/cards/${r}${s}.svg`;
+      preloadedDeck.push(img);
     }
   }
-  const feltImg = new Image();
-  feltImg.src = '/src/assets/images/table_felt_surface_1794510216671.jpg';
 }
 
 interface PlayingCardProps {
@@ -92,7 +92,7 @@ const PlayingCardInner: React.FC<PlayingCardProps> = ({
           ? 'cursor-pointer drop-shadow-[0_8px_16px_rgba(0,0,0,0.45)] hover:-translate-y-5 hover:scale-110 hover:z-40 hover:drop-shadow-[0_14px_24px_rgba(165,225,210,0.5)] active:translate-y-0 active:scale-95'
           : 'drop-shadow-[0_5px_12px_rgba(0,0,0,0.38)]',
         !playable && !onPlayCardId && !hoverPop && 'cursor-default',
-        dimmed && !playable && 'brightness-65 saturate-75 cursor-not-allowed',
+        dimmed && !playable && 'brightness-75 cursor-not-allowed',
         selected && '-translate-y-3',
         className
       )}

@@ -16,6 +16,8 @@ import { cn } from '../lib/utils.ts';
 import { ChatPanel } from './ChatPanel.tsx';
 import { preloadDeckAssets } from './PlayingCard.tsx';
 import { RulesModal } from './RulesModal.tsx';
+import { getInitials } from './seatAvatar.ts';
+import { ThemeToggle } from './ThemeToggle.tsx';
 import { Button } from './ui/button.tsx';
 import { Label } from './ui/label.tsx';
 import {
@@ -40,14 +42,6 @@ interface LobbyViewProps {
   onSendChat: (text: string) => void;
   onTyping: (isTyping: boolean) => void;
   onLeaveRoom: () => void;
-}
-
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
 }
 
 export const LobbyView: React.FC<LobbyViewProps> = ({
@@ -114,32 +108,33 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F4EC] text-[#1C2B2B] flex flex-col">
+    <div className="min-h-screen bg-surface-muted text-ink flex flex-col">
       {/* Clean 3-zone Top Bar */}
-      <header className="border-b border-[#D3DCDC] bg-white">
+      <header className="border-b border-line bg-surface">
         <div className="mx-auto max-w-7xl px-4 sm:px-8 h-16 flex items-center justify-between gap-8">
-          <span className="font-display text-2xl font-bold tracking-tight text-[#007272] whitespace-nowrap shrink-0">
+          <span className="font-display text-2xl font-bold tracking-tight text-brand-ink whitespace-nowrap shrink-0">
             Call Break
           </span>
 
-          <nav className="hidden md:flex items-center gap-6 text-base font-medium text-[#334343]">
+          <nav className="hidden md:flex items-center gap-6 text-base font-medium text-ink-2">
             <button
               type="button"
               onClick={() => setRulesOpen(true)}
-              className="hover:text-[#007272] hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="hover:text-brand-ink hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               Rules &amp; Scoring
             </button>
             <button
               type="button"
               onClick={handleCopyInvite}
-              className="hover:text-[#007272] hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="hover:text-brand-ink hover:underline transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               Copy Invite
             </button>
           </nav>
 
           <div className="flex items-center gap-2.5 shrink-0">
+            <ThemeToggle variant="compact" />
             <Button variant="outline" size="sm" onClick={onLeaveRoom}>
               <LogOut className="h-4 w-4" />
               Leave
@@ -150,32 +145,32 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-8 py-6 sm:py-8">
         {/* Room Header + Invite Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-[#D3DCDC]">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 border-b border-line">
           <div>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-[#556767]">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-ink-muted">
               <span>Waiting Lobby</span>
               <span aria-hidden="true">·</span>
-              <span className="font-mono font-semibold text-[#007272]">
+              <span className="font-mono font-semibold text-brand-ink">
                 Code {room.roomCode}
               </span>
               <span aria-hidden="true">·</span>
               <span className="tabular-nums">{occupiedCount}/4 Seated</span>
             </div>
-            <h1 className="mt-1 font-display text-3xl sm:text-4xl font-semibold text-[#1C2B2B]">
+            <h1 className="mt-1 font-display text-3xl sm:text-4xl font-semibold text-ink">
               {room.roomName}
             </h1>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center rounded-lg border border-[#D3DCDC] bg-white px-3.5 py-2.5 text-sm font-mono text-[#334343] max-w-[260px] sm:max-w-xs truncate">
+            <div className="flex items-center rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm font-mono text-ink-2 max-w-[260px] sm:max-w-xs truncate">
               {inviteUrl}
             </div>
             <Button variant="secondary" onClick={handleCopyInvite}>
-              {copied ? <Check className="h-4 w-4 text-[#0E7C56]" /> : <Copy className="h-4 w-4" />}
+              {copied ? <Check className="h-4 w-4 text-positive" /> : <Copy className="h-4 w-4" />}
               {copied ? 'Copied' : 'Copy Link'}
             </Button>
             <Button variant="outline" onClick={handleNativeShare}>
-              <Share2 className="h-4 w-4 text-[#007272]" />
+              <Share2 className="h-4 w-4 text-brand-ink" />
               Invite Friends
             </Button>
           </div>
@@ -187,10 +182,10 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
           <div className="lg:col-span-7 space-y-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="font-display text-xl font-semibold text-[#1C2B2B]">
+                <h2 className="font-display text-xl font-semibold text-ink">
                   Table Seats (Counterclockwise)
                 </h2>
-                <p className="text-sm text-[#556767]">
+                <p className="text-sm text-ink-muted">
                   Fill all 4 seats with friends or AI bots to deal Round 1.
                 </p>
               </div>
@@ -209,12 +204,12 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                   <div
                     key={seat.seat}
                     className={cn(
-                      'rounded-xl border p-4 transition-colors bg-white',
+                      'rounded-xl border p-4 transition-colors bg-surface',
                       seat.occupied
                         ? isMe
-                          ? 'border-[#007272] bg-[#E8F6F2]/65'
-                          : 'border-[#D3DCDC]'
-                        : 'border-dashed border-[#869696] bg-white/70'
+                          ? 'border-brand-ink bg-tint/65'
+                          : 'border-line'
+                        : 'border-dashed border-line-strong bg-surface/70'
                     )}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -224,9 +219,9 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             'h-11 w-11 rounded-full flex items-center justify-center font-semibold text-sm shrink-0',
                             seat.occupied
                               ? seat.playerType === 'bot'
-                                ? 'bg-[#E8F6F2] text-[#007272] border border-[#007272]/25'
-                                : 'bg-[#007272] text-white'
-                              : 'bg-[#F2F4EC] text-[#556767]'
+                                ? 'bg-tint text-brand-ink border border-brand-ink/25'
+                                : 'bg-brand text-white'
+                              : 'bg-surface-muted text-ink-muted'
                           )}
                         >
                           {seat.occupied ? (
@@ -242,23 +237,23 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-semibold text-base text-[#1C2B2B] truncate">
+                            <span className="font-semibold text-base text-ink truncate">
                               {seat.occupied ? seat.displayName : `Open Seat ${seat.seat + 1}`}
                             </span>
                             {isMe && (
-                              <span className="text-xs font-semibold text-[#007272]">
+                              <span className="text-xs font-semibold text-brand-ink">
                                 (You)
                               </span>
                             )}
                             {seat.isHost && (
                               <Crown
-                                className="h-4 w-4 text-[#007272] shrink-0"
+                                className="h-4 w-4 text-brand-ink shrink-0"
                                 aria-label="Room Host"
                               />
                             )}
                           </div>
 
-                          <div className="mt-0.5 flex items-center gap-1.5 text-sm text-[#556767]">
+                          <div className="mt-0.5 flex items-center gap-1.5 text-sm text-ink-muted">
                             {seat.occupied ? (
                               <>
                                 <span>
@@ -272,8 +267,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                                 <span
                                   className={
                                     seat.isReady
-                                      ? 'font-semibold text-[#0E7C56]'
-                                      : 'text-[#556767]'
+                                      ? 'font-semibold text-positive'
+                                      : 'text-ink-muted'
                                   }
                                 >
                                   {seat.isReady ? 'Ready' : 'Not ready'}
@@ -296,7 +291,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             size="sm"
                             onClick={() => onSelectSeat(seat.seat)}
                           >
-                            <UserPlus className="h-4 w-4 text-[#007272]" />
+                            <UserPlus className="h-4 w-4 text-brand-ink" />
                             Sit Here
                           </Button>
                           {isHost && (
@@ -319,7 +314,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                           variant="ghost"
                           size="sm"
                           onClick={() => onRemoveBot(seat.seat)}
-                          className="text-[#C81E1E] hover:text-[#A61717] hover:bg-[#FEE2E2]"
+                          className="text-danger-ink hover:text-danger-ink-strong hover:bg-danger-tint"
                         >
                           <Trash2 className="h-4 w-4" />
                           Remove Bot
@@ -345,7 +340,7 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                             size="sm"
                             onClick={() => onTransferHost(seat.seat)}
                           >
-                            <Crown className="h-4 w-4 text-[#007272]" />
+                            <Crown className="h-4 w-4 text-brand-ink" />
                             Make Host
                           </Button>
                         )}
@@ -356,13 +351,13 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
             </div>
 
             {/* Room Settings Panel */}
-            <div className="rounded-xl border border-[#D3DCDC] bg-white p-6 space-y-5">
+            <div className="rounded-xl border border-line bg-surface p-6 space-y-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="font-display text-xl font-semibold text-[#1C2B2B]">
+                  <h2 className="font-display text-xl font-semibold text-ink">
                     Match Rules &amp; Configuration
                   </h2>
-                  <p className="text-sm text-[#556767]">
+                  <p className="text-sm text-ink-muted">
                     {isHost
                       ? 'Traditional Nepali rules are enabled by default.'
                       : 'Only the host can adjust rules before starting.'}
@@ -431,11 +426,11 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-[#E4EAEA]">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-line-soft">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label className="text-[#1C2B2B]">Strict Must-Beat</Label>
-                    <p className="text-xs text-[#556767]">
+                    <Label className="text-ink">Strict Must-Beat</Label>
+                    <p className="text-xs text-ink-muted">
                       Beat highest lead card if able
                     </p>
                   </div>
@@ -450,8 +445,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label className="text-[#1C2B2B]">Strict Must-Trump</Label>
-                    <p className="text-xs text-[#556767]">
+                    <Label className="text-ink">Strict Must-Trump</Label>
+                    <p className="text-xs text-ink-muted">
                       Play ♠ when void in lead suit
                     </p>
                   </div>
@@ -466,8 +461,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
 
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <Label className="text-[#1C2B2B]">Turn Timer (25s)</Label>
-                    <p className="text-xs text-[#556767]">
+                    <Label className="text-ink">Turn Timer (25s)</Label>
+                    <p className="text-xs text-ink-muted">
                       Auto-play if timer expires
                     </p>
                   </div>
@@ -482,8 +477,8 @@ export const LobbyView: React.FC<LobbyViewProps> = ({
               </div>
 
               {/* Start Game Action */}
-              <div className="pt-4 border-t border-[#E4EAEA] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <p className="text-sm text-[#4E5D5D]">
+              <div className="pt-4 border-t border-line-soft flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-sm text-ink-3">
                   {!allOccupied
                     ? `Seat ${4 - occupiedCount} more player${
                         4 - occupiedCount > 1 ? 's' : ''

@@ -23,9 +23,9 @@ export const RulesModal: React.FC<RulesModalProps> = ({ open, onOpenChange }) =>
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 text-base text-[#334343] leading-relaxed">
+        <div className="space-y-5 text-base text-ink-2 leading-relaxed">
           <section className="space-y-1.5">
-            <h3 className="font-semibold text-[#1C2B2B]">1. Deal &amp; Turn Order</h3>
+            <h3 className="font-semibold text-ink">1. Deal &amp; Turn Order</h3>
             <p>
               Each player receives 13 cards. Play and dealer rotation proceed
               counterclockwise. The player immediately to the dealer&apos;s right
@@ -34,7 +34,7 @@ export const RulesModal: React.FC<RulesModalProps> = ({ open, onOpenChange }) =>
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-semibold text-[#1C2B2B]">2. Bidding (Calls)</h3>
+            <h3 className="font-semibold text-ink">2. Bidding (Calls)</h3>
             <p>
               Before playing, each player declares how many tricks they expect to win
               (default 1–8). Bids are revealed in turn, cannot be changed, and do not
@@ -43,8 +43,8 @@ export const RulesModal: React.FC<RulesModalProps> = ({ open, onOpenChange }) =>
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-semibold text-[#1C2B2B]">3. Playing &amp; Trumping</h3>
-            <ul className="list-disc pl-5 space-y-1.5 text-[#334343]">
+            <h3 className="font-semibold text-ink">3. Playing &amp; Trumping</h3>
+            <ul className="list-disc pl-5 space-y-1.5 text-ink-2">
               <li>
                 You must follow the leading suit whenever you hold a card of that suit.
               </li>
@@ -69,44 +69,44 @@ export const RulesModal: React.FC<RulesModalProps> = ({ open, onOpenChange }) =>
           </section>
 
           <section className="space-y-2">
-            <h3 className="font-semibold text-[#1C2B2B]">4. Fractional Scoring</h3>
+            <h3 className="font-semibold text-ink">4. Fractional Scoring</h3>
             <p>
               Meeting or exceeding your bid earns{' '}
-              <span className="font-mono font-semibold text-[#007272]">
+              <span className="font-mono font-semibold text-brand-ink">
                 Bid + 0.1 × (Tricks − Bid)
               </span>
               . Falling short deducts{' '}
-              <span className="font-mono font-semibold text-[#C81E1E]">−Bid</span>.
+              <span className="font-mono font-semibold text-danger-ink">−Bid</span>.
             </p>
-            <div className="overflow-hidden rounded-lg border border-[#D3DCDC] bg-white">
+            <div className="overflow-hidden rounded-lg border border-line bg-surface">
               <table className="w-full text-left text-sm">
-                <thead className="bg-[#F2F4EC] border-b border-[#D3DCDC] text-[#4E5D5D]">
+                <thead className="bg-surface-muted border-b border-line text-ink-3">
                   <tr>
                     <th className="px-4 py-2.5 font-semibold">Bid</th>
                     <th className="px-4 py-2.5 font-semibold">Tricks Won</th>
                     <th className="px-4 py-2.5 font-semibold text-right">Round Score</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#E4EAEA] font-mono tabular-nums">
+                <tbody className="divide-y divide-line-soft font-mono tabular-nums">
                   <tr>
                     <td className="px-4 py-2">3</td>
                     <td className="px-4 py-2">3</td>
-                    <td className="px-4 py-2 text-right font-semibold text-[#0E7C56]">+3.0</td>
+                    <td className="px-4 py-2 text-right font-semibold text-positive">+3.0</td>
                   </tr>
                   <tr>
                     <td className="px-4 py-2">3</td>
                     <td className="px-4 py-2">5</td>
-                    <td className="px-4 py-2 text-right font-semibold text-[#0E7C56]">+3.2</td>
+                    <td className="px-4 py-2 text-right font-semibold text-positive">+3.2</td>
                   </tr>
                   <tr>
                     <td className="px-4 py-2">4</td>
                     <td className="px-4 py-2">2</td>
-                    <td className="px-4 py-2 text-right font-semibold text-[#C81E1E]">-4.0</td>
+                    <td className="px-4 py-2 text-right font-semibold text-danger-ink">-4.0</td>
                   </tr>
                   <tr>
                     <td className="px-4 py-2">5</td>
                     <td className="px-4 py-2">6</td>
-                    <td className="px-4 py-2 text-right font-semibold text-[#0E7C56]">+5.1</td>
+                    <td className="px-4 py-2 text-right font-semibold text-positive">+5.1</td>
                   </tr>
                 </tbody>
               </table>

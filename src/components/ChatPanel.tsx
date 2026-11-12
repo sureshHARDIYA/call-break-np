@@ -60,20 +60,20 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   return (
     <div
       className={cn(
-        'flex flex-col rounded-xl border border-[#D3DCDC] bg-white text-[#1C2B2B] overflow-hidden',
+        'flex flex-col rounded-xl border border-line bg-surface text-ink overflow-hidden',
         className
       )}
     >
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[#D3DCDC] bg-[#F2F4EC]/60">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface-muted/60">
         <div>
-          <h3 className="text-base font-semibold text-[#1C2B2B]">Table Chat</h3>
-          <p className="text-xs text-[#556767]">Live room messages</p>
+          <h3 className="text-base font-semibold text-ink">Table Chat</h3>
+          <p className="text-xs text-ink-muted">Live room messages</p>
         </div>
         {onClose && (
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md p-1.5 text-[#556767] hover:bg-[#E8F6F2] hover:text-[#004646] cursor-pointer"
+            className="rounded-md p-1.5 text-ink-muted hover:bg-tint hover:text-brand-ink-strong cursor-pointer"
             aria-label="Close chat"
           >
             <X className="h-4 w-4" />
@@ -88,7 +88,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             return (
               <div
                 key={msg.id}
-                className="text-center text-xs text-[#556767] py-0.5"
+                className="text-center text-xs text-ink-muted py-0.5"
               >
                 {msg.text}
               </div>
@@ -104,8 +104,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 isMe ? 'ml-auto items-end' : 'mr-auto items-start'
               )}
             >
-              <div className="flex items-center gap-1.5 text-xs text-[#556767] mb-1">
-                <span className="font-semibold text-[#334343]">
+              <div className="flex items-center gap-1.5 text-xs text-ink-muted mb-1">
+                <span className="font-semibold text-ink-2">
                   {isMe ? 'You' : msg.senderName}
                 </span>
                 <span aria-hidden="true">·</span>
@@ -120,8 +120,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
                 className={cn(
                   'rounded-lg px-3.5 py-2 text-sm break-words',
                   isMe
-                    ? 'bg-[#007272] text-white font-medium'
-                    : 'bg-[#F2F4EC] text-[#1C2B2B] border border-[#D3DCDC]'
+                    ? 'bg-brand text-white font-medium'
+                    : 'bg-surface-muted text-ink border border-line'
                 )}
               >
                 {msg.text}
@@ -133,7 +133,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       </div>
 
       {/* Typing indicator */}
-      <div className="h-5 px-4 flex items-center text-xs text-[#007272] font-medium">
+      <div className="h-5 px-4 flex items-center text-xs text-brand-ink font-medium">
         {activeTypers.length > 0 && (
           <span>
             {activeTypers.map((t) => t.displayName).join(', ')}{' '}
@@ -149,7 +149,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
             key={phrase}
             type="button"
             onClick={() => onSendMessage(phrase)}
-            className="whitespace-nowrap shrink-0 rounded-md border border-[#D3DCDC] bg-[#F2F4EC] px-3 py-1 text-xs font-medium text-[#1C2B2B] hover:bg-[#E8F6F2] hover:border-[#007272] hover:text-[#004646] transition-colors cursor-pointer"
+            className="whitespace-nowrap shrink-0 rounded-md border border-line bg-surface-muted px-3 py-1 text-xs font-medium text-ink hover:bg-tint hover:border-brand-ink hover:text-brand-ink-strong transition-colors cursor-pointer"
           >
             {phrase}
           </button>
@@ -159,7 +159,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       {/* Composer */}
       <form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 border-t border-[#D3DCDC] p-2.5 bg-[#F2F4EC]/50"
+        className="flex items-center gap-2 border-t border-line p-2.5 bg-surface-muted/50"
       >
         <Input
           value={draft}

@@ -1431,18 +1431,25 @@ export class RoomManager {
     actionId: string
   ): void {
     const { room } = runtime;
-    if (room.phase !== 'GAME_COMPLETE') return;
+    // The host may restart at any point once a match is under way.
+    if (room.phase === 'LOBBY') return;
     if (!room.seats[callerSeat].isHost) {
       this.send(ws, {
         type: 'game.error',
         code: 'NOT_HOST',
-        message: 'Only the host can start a new match.',
+        message: 'Only the host can restart the match.',
         actionId,
       });
       return;
     }
 
     this.markAction(runtime, actionId);
+    if (room.phase !== 'GAME_COMPLETE') {
+      this.pushSystemChat(
+        runtime,
+        `${room.seats[callerSeat].displayName} restarted the match.`
+      );
+    }
     room.currentRound = 1;
     room.dealerSeat = nextSeat(room.dealerSeat);
     room.roundHistory = [];

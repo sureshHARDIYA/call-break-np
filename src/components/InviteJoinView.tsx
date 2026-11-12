@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { RoomSettings, SeatIndex } from '../engine/types.ts';
 import { cn } from '../lib/utils.ts';
 import { getSavedDisplayName, saveDisplayName } from '../store/gameStore.ts';
+import { ThemeToggle } from './ThemeToggle.tsx';
 import { Button } from './ui/button.tsx';
 import { Input } from './ui/input.tsx';
 import { Label } from './ui/label.tsx';
@@ -76,35 +77,38 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F4EC] text-[#1C2B2B] flex flex-col">
-      <header className="border-b border-[#D3DCDC] bg-white">
+    <div className="min-h-screen bg-surface-muted text-ink flex flex-col">
+      <header className="border-b border-line bg-surface">
         <div className="mx-auto max-w-6xl px-4 sm:px-8 h-16 flex items-center justify-between">
           <button
             type="button"
             onClick={onBackHome}
-            className="font-display text-2xl font-bold text-[#007272] cursor-pointer"
+            className="font-display text-2xl font-bold text-brand-ink cursor-pointer"
           >
             Call Break
           </button>
-          <Button variant="ghost" size="sm" onClick={onBackHome}>
-            <ArrowLeft className="h-4 w-4" />
-            All Options
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle variant="compact" />
+            <Button variant="ghost" size="sm" onClick={onBackHome}>
+              <ArrowLeft className="h-4 w-4" />
+              All Options
+            </Button>
+          </div>
         </div>
       </header>
 
       <main className="flex-1 flex items-center justify-center px-4 py-10">
-        <div className="w-full max-w-lg rounded-xl border border-[#D3DCDC] bg-white p-6 sm:p-8 shadow-[0_10px_32px_rgba(0,70,70,0.07)] space-y-6">
+        <div className="w-full max-w-lg rounded-xl border border-line bg-surface p-6 sm:p-8 shadow-[0_10px_32px_rgba(0,70,70,0.07)] space-y-6">
           {isLoading ? (
-            <div className="py-10 text-center text-base text-[#556767]">
+            <div className="py-10 text-center text-base text-ink-muted">
               Looking up room <span className="font-mono font-semibold">{roomCode}</span>…
             </div>
           ) : isError || !data ? (
             <div className="space-y-4 text-center py-6">
-              <h1 className="font-display text-2xl font-semibold text-[#1C2B2B]">
+              <h1 className="font-display text-2xl font-semibold text-ink">
                 Room {roomCode} Not Found
               </h1>
-              <p className="text-base text-[#556767]">
+              <p className="text-base text-ink-muted">
                 {error instanceof Error
                   ? error.message
                   : 'This Call Break table may have expired or the code is incorrect.'}
@@ -113,10 +117,10 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
             </div>
           ) : data.isFull ? (
             <div className="space-y-4 text-center py-6">
-              <h1 className="font-display text-2xl font-semibold text-[#1C2B2B]">
+              <h1 className="font-display text-2xl font-semibold text-ink">
                 {data.roomName} is Full
               </h1>
-              <p className="text-base text-[#556767]">
+              <p className="text-base text-ink-muted">
                 All 4 seats in room <span className="font-mono font-semibold">{data.roomCode}</span>{' '}
                 are already occupied. If you were previously seated on this device,
                 try reconnecting from your original browser session.
@@ -126,10 +130,10 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
           ) : (
             <>
               <div>
-                <div className="flex items-center gap-2 text-sm text-[#556767]">
+                <div className="flex items-center gap-2 text-sm text-ink-muted">
                   <span>Table Invitation</span>
                   <span aria-hidden="true">·</span>
-                  <span className="font-mono font-semibold text-[#007272]">
+                  <span className="font-mono font-semibold text-brand-ink">
                     {data.roomCode}
                   </span>
                   <span aria-hidden="true">·</span>
@@ -137,7 +141,7 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
                     {data.settings.rounds} Round{data.settings.rounds > 1 ? 's' : ''}
                   </span>
                 </div>
-                <h1 className="mt-1 font-display text-2xl sm:text-3xl font-semibold text-[#1C2B2B]">
+                <h1 className="mt-1 font-display text-2xl sm:text-3xl font-semibold text-ink">
                   {data.roomName}
                 </h1>
               </div>
@@ -159,25 +163,25 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
                         className={cn(
                           'rounded-lg border p-3.5 text-left transition-colors',
                           seat.occupied
-                            ? 'border-[#D3DCDC] bg-[#F2F4EC] opacity-65 cursor-not-allowed'
+                            ? 'border-line bg-surface-muted opacity-65 cursor-not-allowed'
                             : selected
-                            ? 'border-[#007272] bg-[#E8F6F2] ring-1 ring-[#007272] cursor-pointer'
-                            : 'border-[#D3DCDC] bg-white hover:border-[#007272]/60 cursor-pointer'
+                            ? 'border-brand-ink bg-tint ring-1 ring-brand-ink cursor-pointer'
+                            : 'border-line bg-surface hover:border-brand-ink/60 cursor-pointer'
                         )}
                       >
-                        <div className="flex items-center justify-between text-xs font-medium text-[#556767]">
+                        <div className="flex items-center justify-between text-xs font-medium text-ink-muted">
                           <span>Seat {seat.seat + 1}</span>
                           {seat.occupied ? (
                             seat.playerType === 'bot' ? (
-                              <Bot className="h-4 w-4 text-[#007272]" />
+                              <Bot className="h-4 w-4 text-brand-ink" />
                             ) : (
-                              <Users className="h-4 w-4 text-[#4E5D5D]" />
+                              <Users className="h-4 w-4 text-ink-3" />
                             )
                           ) : (
-                            <span className="font-semibold text-[#007272]">Open</span>
+                            <span className="font-semibold text-brand-ink">Open</span>
                           )}
                         </div>
-                        <div className="mt-1 text-base font-semibold text-[#1C2B2B] truncate">
+                        <div className="mt-1 text-base font-semibold text-ink truncate">
                           {seat.occupied ? seat.displayName : 'Tap to claim'}
                         </div>
                       </button>

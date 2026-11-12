@@ -9,7 +9,7 @@ export const Label = React.forwardRef<
   <LabelPrimitive.Root
     ref={ref}
     className={cn(
-      'text-sm font-semibold text-[#1C2B2B] leading-snug peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+      'text-sm font-semibold text-ink leading-snug peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
       className
     )}
     {...props}

@@ -4,28 +4,127 @@
   --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Semantic color tokens (light values). Dark values override them below. */
+  --color-canvas: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f2f4ec;
+  --color-tint: #e8f6f2;
+  --color-tint-strong: #d5efe8;
+  --color-line: #d3dcdc;
+  --color-line-soft: #e4eaea;
+  --color-line-strong: #869696;
+  --color-ink: #1c2b2b;
+  --color-ink-2: #334343;
+  --color-ink-3: #4e5d5d;
+  --color-ink-muted: #556767;
+  --color-brand: #007272;
+  --color-brand-hover: #005a5a;
+  --color-brand-active: #004646;
+  --color-brand-ink: #007272;
+  --color-brand-ink-strong: #004646;
+  --color-mint: #a5e1d2;
+  --color-positive: #0e7c56;
+  --color-positive-line: #28b482;
+  --color-danger: #c81e1e;
+  --color-danger-hover: #a61717;
+  --color-danger-ink: #c81e1e;
+  --color-danger-ink-strong: #a61717;
+  --color-danger-tint: #fee2e2;
+  --color-overlay: #002828;
+  --color-felt-deep: #003838;
 }
 
 @layer base {
   :root {
-    --bg-canvas: #ffffff;
-    --bg-pistachio: #f2f4ec;
-    --bg-mint-tint: #e8f6f2;
-    --bg-card: #ffffff;
-    --border-hairline: #d3dcdc;
-    --border-input: #869696;
-    --dnb-sea-green: #007272;
-    --dnb-sea-green-hover: #005a5a;
-    --dnb-sea-green-deep: #004646;
-    --dnb-mint: #a5e1d2;
-    --dnb-summer-green: #28b482;
-    --text-primary: #1c2b2b;
-    --text-secondary: #334343;
-    --text-muted: #556767;
-    --felt-base: #005a5a;
-    --felt-deep: #003838;
-    --suit-red: #c81e1e;
-    --suit-black: #1c2b2b;
+    color-scheme: light;
+    --felt-1: #006666;
+    --felt-2: #004b4b;
+    --felt-3: #003131;
+    --scrollbar-track: rgba(0, 70, 70, 0.04);
+    --scrollbar-thumb: rgba(0, 114, 114, 0.22);
+    --scrollbar-thumb-hover: rgba(0, 114, 114, 0.38);
+  }
+
+  /*
+   * Dark theme. Applied when the user picks "dark", or when they have made
+   * no choice (or picked "system") and the OS prefers dark. Keep the two
+   * blocks below identical.
+   */
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --color-canvas: #0a1313;
+    --color-surface: #152424;
+    --color-surface-muted: #0e1a1a;
+    --color-tint: #173533;
+    --color-tint-strong: #1d4744;
+    --color-line: #2a4040;
+    --color-line-soft: #213434;
+    --color-line-strong: #5c7574;
+    --color-ink: #e8f0ef;
+    --color-ink-2: #c9d6d5;
+    --color-ink-3: #a9bab9;
+    --color-ink-muted: #8fa3a2;
+    --color-brand: #008080;
+    --color-brand-hover: #006b6b;
+    --color-brand-active: #005c5c;
+    --color-brand-ink: #5ad4c4;
+    --color-brand-ink-strong: #a4ecdf;
+    --color-mint: #2b7a70;
+    --color-positive: #4fd8a0;
+    --color-positive-line: #2fb888;
+    --color-danger: #d92d2d;
+    --color-danger-hover: #b91c1c;
+    --color-danger-ink: #f98080;
+    --color-danger-ink-strong: #fca5a5;
+    --color-danger-tint: #3a1616;
+    --color-overlay: #000000;
+    --color-felt-deep: #031a1a;
+    --felt-1: #0a4a48;
+    --felt-2: #062f2e;
+    --felt-3: #031c1c;
+    --scrollbar-track: rgba(255, 255, 255, 0.04);
+    --scrollbar-thumb: rgba(90, 212, 196, 0.25);
+    --scrollbar-thumb-hover: rgba(90, 212, 196, 0.42);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+      --color-canvas: #0a1313;
+      --color-surface: #152424;
+      --color-surface-muted: #0e1a1a;
+      --color-tint: #173533;
+      --color-tint-strong: #1d4744;
+      --color-line: #2a4040;
+      --color-line-soft: #213434;
+      --color-line-strong: #5c7574;
+      --color-ink: #e8f0ef;
+      --color-ink-2: #c9d6d5;
+      --color-ink-3: #a9bab9;
+      --color-ink-muted: #8fa3a2;
+      --color-brand: #008080;
+      --color-brand-hover: #006b6b;
+      --color-brand-active: #005c5c;
+      --color-brand-ink: #5ad4c4;
+      --color-brand-ink-strong: #a4ecdf;
+      --color-mint: #2b7a70;
+      --color-positive: #4fd8a0;
+      --color-positive-line: #2fb888;
+      --color-danger: #d92d2d;
+      --color-danger-hover: #b91c1c;
+      --color-danger-ink: #f98080;
+      --color-danger-ink-strong: #fca5a5;
+      --color-danger-tint: #3a1616;
+      --color-overlay: #000000;
+      --color-felt-deep: #031a1a;
+      --felt-1: #0a4a48;
+      --felt-2: #062f2e;
+      --felt-3: #031c1c;
+      --scrollbar-track: rgba(255, 255, 255, 0.04);
+      --scrollbar-thumb: rgba(90, 212, 196, 0.25);
+      --scrollbar-thumb-hover: rgba(90, 212, 196, 0.42);
+    }
   }
 
   html,
@@ -33,8 +132,8 @@
     font-family: var(--font-sans);
     font-size: 16px;
     line-height: 1.5;
-    background-color: var(--bg-canvas);
-    color: var(--text-primary);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
     min-height: 100%;
     overflow-x: hidden;
   }
@@ -53,23 +152,56 @@
   }
 }
 
-/* Clean light scrollbar matching DNB Eufemia surfaces */
+/* Thin scrollbar that follows the active theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 70, 70, 0.04);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 114, 114, 0.22);
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 114, 114, 0.38);
+  background: var(--scrollbar-thumb-hover);
+}
+
+/*
+ * Hand row. Its height is reserved even when the hand is empty (between
+ * rounds), so the seats above it do not jump when cards are dealt.
+ * 251 / 175 is the card aspect ratio; 96px is the largest card width.
+ */
+.hand-row {
+  min-height: min(138px, calc((100vw + 48px) / 13 * 251 / 175));
+}
+
+/*
+ * Phone hand layout: cards keep a readable fixed width and overlap only as
+ * much as the hand size requires, so fewer cards spread out automatically.
+ * --hand-count is set inline by the hand row.
+ */
+@media (max-width: 639px) {
+  .hand-row {
+    --hand-card-w: clamp(54px, 17vw, 70px);
+    min-height: calc(var(--hand-card-w) * 251 / 175);
+  }
+
+  .hand-row > * {
+    flex: 0 0 var(--hand-card-w);
+    max-width: none;
+  }
+
+  .hand-row > * + * {
+    margin-left: min(
+      6px,
+      calc((100% - var(--hand-count) * var(--hand-card-w)) / (var(--hand-count) - 1))
+    );
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

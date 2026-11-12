@@ -9,6 +9,7 @@ import { LobbyView } from './components/LobbyView.tsx';
 import { TooltipProvider } from './components/ui/tooltip.tsx';
 import { SeatIndex } from './engine/types.ts';
 import { soundFx } from './lib/sound.ts';
+import { useThemePreference } from './lib/theme.ts';
 import {
   getSavedSessionToken,
   saveSessionToken,
@@ -143,12 +144,12 @@ function AppContent() {
       !lastError
     ) {
       return (
-        <div className="min-h-screen bg-[#F2F4EC] text-[#1C2B2B] flex items-center justify-center p-6">
-          <div className="rounded-xl border border-[#D3DCDC] bg-white px-8 py-6 text-center space-y-2 shadow-sm">
-            <p className="font-display text-xl font-semibold text-[#1C2B2B]">
+        <div className="min-h-screen bg-surface-muted text-ink flex items-center justify-center p-6">
+          <div className="rounded-xl border border-line bg-surface px-8 py-6 text-center space-y-2 shadow-sm">
+            <p className="font-display text-xl font-semibold text-ink">
               Connecting to Room {routeRoomCode}…
             </p>
-            <p className="text-sm text-[#556767]">
+            <p className="text-sm text-ink-muted">
               Synchronizing authoritative table state
             </p>
           </div>
@@ -198,11 +199,12 @@ function AppContent() {
 }
 
 export default function App() {
+  const themePreference = useThemePreference();
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <AppContent />
-        <Toaster theme="light" position="top-center" richColors />
+        <Toaster theme={themePreference} position="top-center" richColors />
       </TooltipProvider>
     </QueryClientProvider>
   );
