@@ -172,6 +172,44 @@
 }
 
 /*
+ * Card table surface. The player picks the pattern in Settings; patterns are
+ * faint light lines or dots laid over the same felt gradient.
+ */
+.table-surface {
+  --felt-gradient: radial-gradient(
+    ellipse at center,
+    var(--felt-1) 0%,
+    var(--felt-2) 58%,
+    var(--felt-3) 100%
+  );
+  --felt-mark: rgba(255, 255, 255, 0.075);
+  background: var(--felt-gradient);
+}
+
+.table-surface[data-table-bg='plain'] {
+  background: var(--felt-2);
+}
+
+.table-surface[data-table-bg='diamonds'] {
+  background:
+    repeating-linear-gradient(45deg, var(--felt-mark) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(-45deg, var(--felt-mark) 0 1px, transparent 1px 22px),
+    var(--felt-gradient);
+}
+
+.table-surface[data-table-bg='stripes'] {
+  background:
+    repeating-linear-gradient(90deg, var(--felt-mark) 0 2px, transparent 2px 28px),
+    var(--felt-gradient);
+}
+
+.table-surface[data-table-bg='dots'] {
+  background:
+    radial-gradient(circle, var(--felt-mark) 1.5px, transparent 2px) 0 0 / 20px 20px,
+    var(--felt-gradient);
+}
+
+/*
  * Hand row. Its height is reserved even when the hand is empty (between
  * rounds), so the seats above it do not jump when cards are dealt.
  * 251 / 175 is the card aspect ratio; 96px is the largest card width.

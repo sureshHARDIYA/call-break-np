@@ -2,14 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
-  BookOpen,
   Bot,
   LogOut,
   MessageSquare,
   RotateCcw,
   Trophy,
-  Volume2,
-  VolumeX,
+  Settings,
 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { chooseBotBid } from '../engine/bots.ts';
@@ -20,16 +18,17 @@ import {
   SUIT_SYMBOLS,
 } from '../engine/rules.ts';
 import { Card, ChatMessage, SeatIndex } from '../engine/types.ts';
+import { useTableBackground } from '../lib/tableBackground.ts';
 import { cn } from '../lib/utils.ts';
 import { useGameStore } from '../store/gameStore.ts';
 import { ChatPanel } from './ChatPanel.tsx';
+import { GameSettingsDialog } from './GameSettingsDialog.tsx';
 import { Logo } from './Logo.tsx';
 import { MatchResultsModal } from './MatchResultsModal.tsx';
 import { CardBack, PlayingCard, preloadDeckAssets } from './PlayingCard.tsx';
 import { RulesModal } from './RulesModal.tsx';
 import { ScoreboardModal } from './ScoreboardModal.tsx';
 import { AVATAR_TONES, getInitials } from './seatAvatar.ts';
-import { ThemeToggle } from './ThemeToggle.tsx';
 import { Button } from './ui/button.tsx';
 import {
   Dialog,
@@ -72,7 +71,6 @@ const TopHudBar: React.FC<{
     trickNumber,
     unreadChatCount,
     chatOpen,
-    muted,
     isHost,
   } = useGameStore(
     useShallow((s) => ({
@@ -82,12 +80,12 @@ const TopHudBar: React.FC<{
       trickNumber: s.room?.trickNumber ?? 1,
       unreadChatCount: s.unreadChatCount,
       chatOpen: s.chatOpen,
-      muted: s.muted,
       isHost:
         s.room?.mySeat != null && Boolean(s.room.seats[s.room.mySeat]?.isHost),
     }))
   );
   const [restartConfirmOpen, setRestartConfirmOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const handleConfirmRestart = () => {
     setRestartConfirmOpen(false);
@@ -116,35 +114,6 @@ const TopHudBar: React.FC<{
         <Button variant="ghost" size="sm" onClick={onOpenScoreboard}>
           <Trophy className="h-4 w-4 text-brand-ink" />
           <span className="hidden sm:inline">Scores</span>
-        </Button>
-        <Button variant="ghost" size="sm" onClick={onOpenRules}>
-          <BookOpen className="h-4 w-4 text-ink-2" />
-          <span className="hidden md:inline">Rules</span>
-        </Button>
-        {isHost && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setRestartConfirmOpen(true)}
-            aria-label="Restart match"
-          >
-            <RotateCcw className="h-4 w-4 text-ink-2" />
-            <span className="hidden md:inline">Restart</span>
-          </Button>
-        )}
-        <ThemeToggle variant="compact" className="hidden sm:inline-flex" />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9"
-          onClick={() => useGameStore.getState().toggleMute()}
-          aria-label={muted ? 'Unmute sounds' : 'Mute sounds'}
-        >
-          {muted ? (
-            <VolumeX className="h-4 w-4 text-ink-muted" />
-          ) : (
-            <Volume2 className="h-4 w-4 text-brand-ink" />
-          )}
         </Button>
         <Button
           variant="secondary"
@@ -181,11 +150,28 @@ const TopHudBar: React.FC<{
             </span>
           )}
         </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9"
+          onClick={() => setSettingsOpen(true)}
+          aria-label="Settings"
+        >
+          <Settings className="h-4.5 w-4.5 text-ink-2" />
+        </Button>
         <Button variant="outline" size="sm" onClick={onLeaveRoom}>
           <LogOut className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">Leave</span>
         </Button>
       </div>
+
+      <GameSettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        isHost={isHost}
+        onOpenRules={onOpenRules}
+        onRequestRestart={() => setRestartConfirmOpen(true)}
+      />
 
       <Dialog open={restartConfirmOpen} onOpenChange={setRestartConfirmOpen}>
         <DialogContent className="max-w-md">
@@ -663,7 +649,13 @@ const CenterArena: React.FC = React.memo(() => {
             </span>
           )}
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+        <div
+          className={cn(
+            'mx-auto grid max-w-xs gap-2',
+            // 8 bids sit in two rows of four; the 13-bid variant uses rows of seven.
+            bidRange.length <= 8 ? 'grid-cols-4' : 'max-w-none grid-cols-7'
+          )}
+        >
           {bidRange.map((num) => {
             const isSuggested = centerState.suggestedBid === num;
             const isChosen = chosenBid === num;
@@ -675,7 +667,7 @@ const CenterArena: React.FC = React.memo(() => {
                 onClick={() => setPickedBid(num)}
                 title={isSuggested ? `Suggested bid: ${num}` : undefined}
                 className={cn(
-                  'h-10 min-w-[44px] px-3 rounded-lg border font-mono text-sm sm:text-base font-bold transition-colors cursor-pointer',
+                  'h-11 w-full rounded-lg border font-mono text-sm sm:text-base font-bold transition-colors cursor-pointer',
                   isChosen
                     ? 'border-brand-ink bg-brand text-white ring-2 ring-mint'
                     : isSuggested
@@ -910,6 +902,7 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
   const [scoreboardOpen, setScoreboardOpen] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
   const [resultsOpen, setResultsOpen] = useState(false);
+  const tableBackground = useTableBackground();
 
   const { phase, currentRound, room } = useGameStore(
     useShallow((s) => ({
@@ -951,7 +944,10 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
 
       <div className="relative flex-1 min-h-0 flex overflow-hidden">
         {/* Sea-Green Felt Card Table Canvas */}
-        <div className="relative flex-1 min-h-0 flex flex-col justify-between overflow-hidden bg-[radial-gradient(ellipse_at_center,var(--felt-1)_0%,var(--felt-2)_58%,var(--felt-3)_100%)]">
+        <div
+          data-table-bg={tableBackground}
+          className="table-surface relative flex-1 min-h-0 flex flex-col justify-between overflow-hidden"
+        >
           {/* Top Opponent Seat */}
           <div className="relative z-10 shrink-0 flex flex-col items-center pt-2 px-4">
             <SeatPlate pos="top" showCardBackFan />
