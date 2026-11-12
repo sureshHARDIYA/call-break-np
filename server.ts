@@ -7,11 +7,23 @@ import { z } from 'zod';
 import { RoomSettingsSchema } from './src/engine/protocol.ts';
 import { createRateLimiter } from './server/rateLimit.ts';
 import { roomManager } from './server/roomManager.ts';
+import {
+  clientAddress,
+  createConnectionLimiter,
+  createMessageBudget,
+  isSameOriginHandshake,
+} from './server/wsGuards.ts';
 
 const JSON_BODY_LIMIT = '10kb';
 const WS_MAX_PAYLOAD_BYTES = 16 * 1024;
 const ROOM_CREATE_WINDOW_MS = 60_000;
 const ROOM_CREATE_MAX_PER_WINDOW = 10;
+const ROOM_LOOKUP_WINDOW_MS = 60_000;
+const ROOM_LOOKUP_MAX_PER_WINDOW = 60;
+const WS_MAX_CONNECTIONS_PER_ADDRESS = 30;
+const WS_MAX_MESSAGES_PER_SECOND = 40;
+const WS_CLOSE_TRY_AGAIN_LATER = 1013;
+const WS_CLOSE_POLICY_VIOLATION = 1008;
 
 const CreateRoomBodySchema = z.object({
   displayName: z.string().trim().min(1).max(24),
@@ -49,7 +61,13 @@ async function startServer() {
     res.status(201).json(result);
   });
 
-  app.get('/api/rooms/:code', (req, res) => {
+  // Slows down guessing of room codes.
+  const roomLookupLimiter = createRateLimiter({
+    windowMs: ROOM_LOOKUP_WINDOW_MS,
+    max: ROOM_LOOKUP_MAX_PER_WINDOW,
+  });
+
+  app.get('/api/rooms/:code', roomLookupLimiter, (req, res) => {
     const summary = roomManager.getPublicRoomSummary(req.params.code);
     if (!summary) {
       res.status(404).json({ error: 'Room not found' });
@@ -63,9 +81,18 @@ async function startServer() {
     server,
     path: '/ws',
     maxPayload: WS_MAX_PAYLOAD_BYTES,
+    verifyClient: (info: { origin: string; req: http.IncomingMessage }) =>
+      isSameOriginHandshake(info.origin, info.req.headers.host),
   });
+  const connectionLimiter = createConnectionLimiter(WS_MAX_CONNECTIONS_PER_ADDRESS);
 
-  wss.on('connection', (ws) => {
+  wss.on('connection', (ws, req) => {
+    const address = clientAddress(req);
+    if (!connectionLimiter.tryAcquire(address)) {
+      ws.close(WS_CLOSE_TRY_AGAIN_LATER, 'Too many connections');
+      return;
+    }
+    const hasMessageBudget = createMessageBudget(WS_MAX_MESSAGES_PER_SECOND);
     (ws as unknown as { isAlive: boolean }).isAlive = true;
 
     ws.on('pong', () => {
@@ -73,11 +100,17 @@ async function startServer() {
     });
 
     ws.on('message', (data) => {
+      if (!hasMessageBudget()) {
+        // A real player never sends this fast; drop the flooding connection.
+        ws.close(WS_CLOSE_POLICY_VIOLATION, 'Message rate exceeded');
+        return;
+      }
       (ws as unknown as { isAlive: boolean }).isAlive = true;
       roomManager.handleMessage(ws, data.toString());
     });
 
     ws.on('close', () => {
+      connectionLimiter.release(address);
       roomManager.handleDisconnect(ws);
     });
 
