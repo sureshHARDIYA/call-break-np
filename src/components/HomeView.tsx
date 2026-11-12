@@ -5,6 +5,7 @@ import { BotDifficulty, DEFAULT_ROOM_SETTINGS } from '../engine/types.ts';
 import { cn } from '../lib/utils.ts';
 import { getSavedDisplayName, saveDisplayName } from '../store/gameStore.ts';
 import { RulesModal } from './RulesModal.tsx';
+import { Logo } from './Logo.tsx';
 import { ThemeToggle } from './ThemeToggle.tsx';
 import { Button } from './ui/button.tsx';
 import { Input } from './ui/input.tsx';
@@ -113,11 +114,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="mx-auto max-w-6xl px-4 sm:px-8 h-16 flex items-center justify-between">
           <a
             href="/"
-            className="flex items-baseline gap-2.5 whitespace-nowrap shrink-0"
+            className="flex items-center gap-2.5 whitespace-nowrap shrink-0"
           >
-            <span className="font-display text-2xl font-bold tracking-tight text-brand-ink">
-              Call Break
-            </span>
+            <Logo />
             <span className="text-sm font-medium text-ink-muted">कल ब्रेक</span>
           </a>
           <div className="flex items-center gap-4">

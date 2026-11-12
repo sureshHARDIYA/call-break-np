@@ -23,6 +23,7 @@ import { Card, ChatMessage, SeatIndex } from '../engine/types.ts';
 import { cn } from '../lib/utils.ts';
 import { useGameStore } from '../store/gameStore.ts';
 import { ChatPanel } from './ChatPanel.tsx';
+import { Logo } from './Logo.tsx';
 import { MatchResultsModal } from './MatchResultsModal.tsx';
 import { CardBack, PlayingCard, preloadDeckAssets } from './PlayingCard.tsx';
 import { RulesModal } from './RulesModal.tsx';
@@ -96,9 +97,7 @@ const TopHudBar: React.FC<{
   return (
     <header className="relative z-20 flex h-13 sm:h-14 shrink-0 items-center justify-between gap-4 border-b border-line bg-surface px-3 sm:px-6 text-ink">
       <div className="flex items-center gap-3 min-w-0">
-        <span className="font-display text-lg sm:text-xl font-bold text-brand-ink whitespace-nowrap">
-          Call Break
-        </span>
+        <Logo size="sm" />
         <span className="hidden sm:inline text-line" aria-hidden="true">
           |
         </span>

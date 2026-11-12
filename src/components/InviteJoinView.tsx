@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { RoomSettings, SeatIndex } from '../engine/types.ts';
 import { cn } from '../lib/utils.ts';
 import { getSavedDisplayName, saveDisplayName } from '../store/gameStore.ts';
+import { Logo } from './Logo.tsx';
 import { ThemeToggle } from './ThemeToggle.tsx';
 import { Button } from './ui/button.tsx';
 import { Input } from './ui/input.tsx';
@@ -83,9 +84,10 @@ export const InviteJoinView: React.FC<InviteJoinViewProps> = ({
           <button
             type="button"
             onClick={onBackHome}
-            className="font-display text-2xl font-bold text-brand-ink cursor-pointer"
+            aria-label="Call Break home"
+            className="cursor-pointer"
           >
-            Call Break
+            <Logo />
           </button>
           <div className="flex items-center gap-2">
             <ThemeToggle variant="compact" />
