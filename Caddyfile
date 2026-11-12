@@ -1,3 +1,10 @@
+{
+	# HTTP/3 needs UDP 443, which is deliberately closed; do not advertise it.
+	servers {
+		protocols h1 h2
+	}
+}
+
 {$DOMAIN} {
 	encode zstd gzip
 
@@ -9,8 +16,9 @@
 		Permissions-Policy "camera=(), microphone=(), geolocation=()"
 		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' wss://{host}; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'"
 		-Server
-		-Via
 	}
 
-	reverse_proxy app:3000
+	reverse_proxy app:3000 {
+		header_down -Via
+	}
 }
