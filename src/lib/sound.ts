@@ -6,10 +6,15 @@ const CARD_PLACE_SAMPLE_URLS = [
   '/sounds/card-place-4.mp3',
 ];
 const CARD_PLACE_GAIN = 0.6;
+const CARD_SHUFFLE_SAMPLE_URL = '/sounds/card-shuffle.mp3';
+const CARD_SHUFFLE_GAIN = 0.5;
+// Seconds into the shuffle animation at which cards start flying to the seats.
+const DEAL_TICKS_DELAY_S = 1.15;
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private cardPlaceBuffers: AudioBuffer[] = [];
+  private shuffleBuffer: AudioBuffer | null = null;
   private samplesRequested = false;
   public muted = false;
 
@@ -52,6 +57,32 @@ class SoundEngine {
           // A missing sample is not fatal: card plays fall back to the synthesized snap.
         });
     }
+    fetch(CARD_SHUFFLE_SAMPLE_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Sound ${CARD_SHUFFLE_SAMPLE_URL} returned ${res.status}`);
+        return res.arrayBuffer();
+      })
+      .then((data) => ctx.decodeAudioData(data))
+      .then((buffer) => {
+        this.shuffleBuffer = buffer;
+      })
+      .catch(() => {
+        // Not fatal: the deal falls back to the synthesized riffle alone.
+      });
+  }
+
+  /** Plays the recorded riffle shuffle. Returns false when it has not loaded yet. */
+  private playShuffleSample(): boolean {
+    const ctx = this.getContext();
+    if (!ctx || !this.shuffleBuffer) return false;
+    const source = ctx.createBufferSource();
+    source.buffer = this.shuffleBuffer;
+    const gainNode = ctx.createGain();
+    gainNode.gain.value = CARD_SHUFFLE_GAIN;
+    source.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    source.start();
+    return true;
   }
 
   /** Plays a random recorded card sound. Returns false when none has loaded yet. */
@@ -154,11 +185,15 @@ class SoundEngine {
     source.start(start);
   }
 
-  /** Crisp cascading card-deal riffle/shuffle sound when 13 cards are dealt */
+  /**
+   * New deal: a recorded riffle shuffle, then quick ticks as the cards go out.
+   * Without the recording the ticks play straight away.
+   */
   playCardDeal() {
+    const ticksStart = this.playShuffleSample() ? DEAL_TICKS_DELAY_S : 0;
     const cardTicks = 9;
     for (let i = 0; i < cardTicks; i++) {
-      const delay = i * 0.042;
+      const delay = ticksStart + i * 0.042;
       this.playNoiseFlick(delay, 0.055, 1600 + i * 110);
       this.playTone(320 + i * 24, 0.045, 'triangle', 0.028, delay);
     }

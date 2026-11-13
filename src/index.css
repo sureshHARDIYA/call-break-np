@@ -243,6 +243,64 @@
 }
 
 /*
+ * Dealing a new hand: cards stay hidden while the deck shuffles in the centre,
+ * then drop in left to right. --deal-start is set inline by the hand row.
+ */
+.hand-dealing > * {
+  --deal-i: 0;
+  animation: hand-deal-in 320ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(var(--deal-start, 0ms) + var(--deal-i) * 45ms);
+}
+
+.hand-dealing > :nth-child(2) {
+  --deal-i: 1;
+}
+.hand-dealing > :nth-child(3) {
+  --deal-i: 2;
+}
+.hand-dealing > :nth-child(4) {
+  --deal-i: 3;
+}
+.hand-dealing > :nth-child(5) {
+  --deal-i: 4;
+}
+.hand-dealing > :nth-child(6) {
+  --deal-i: 5;
+}
+.hand-dealing > :nth-child(7) {
+  --deal-i: 6;
+}
+.hand-dealing > :nth-child(8) {
+  --deal-i: 7;
+}
+.hand-dealing > :nth-child(9) {
+  --deal-i: 8;
+}
+.hand-dealing > :nth-child(10) {
+  --deal-i: 9;
+}
+.hand-dealing > :nth-child(11) {
+  --deal-i: 10;
+}
+.hand-dealing > :nth-child(12) {
+  --deal-i: 11;
+}
+.hand-dealing > :nth-child(13) {
+  --deal-i: 12;
+}
+
+@keyframes hand-deal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-56px) scale(0.8) rotate(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
  * "Bid" confirm button: a soft ring pulses outward and the arrow nudges, so it
  * is obvious that picking a number is not the final step. Transform/opacity only.
  */

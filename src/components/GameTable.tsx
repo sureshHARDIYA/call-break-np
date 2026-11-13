@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
@@ -28,6 +28,11 @@ import { MatchResultsModal } from './MatchResultsModal.tsx';
 import { CardBack, PlayingCard, preloadDeckAssets } from './PlayingCard.tsx';
 import { RulesModal } from './RulesModal.tsx';
 import { ScoreboardModal } from './ScoreboardModal.tsx';
+import {
+  HAND_DEAL_START_MS,
+  SHUFFLE_DEAL_TOTAL_MS,
+  ShuffleDeal,
+} from './ShuffleDeal.tsx';
 import { AVATAR_TONES, getInitials } from './seatAvatar.ts';
 import { Button } from './ui/button.tsx';
 import {
@@ -749,7 +754,7 @@ CenterArena.displayName = 'CenterArena';
 /* 5. Player Hand & Turn Prompt (Zustand-isolated so opponent plays don't     */
 /*    re-render your cards!)                                                  */
 /* -------------------------------------------------------------------------- */
-const PlayerHandBar: React.FC = React.memo(() => {
+const PlayerHandBar: React.FC<{ dealing: boolean }> = React.memo(({ dealing }) => {
   const handIdsKey = useGameStore((s) =>
     s.room ? s.room.myHand.map((c) => c.id).join(',') : ''
   );
@@ -828,8 +833,16 @@ const PlayerHandBar: React.FC = React.memo(() => {
       {/* Full-Width Responsive 13-Card Hand Row */}
       <div className="w-full pt-3 sm:pt-5 pb-1 px-1 sm:px-4">
         <div
-          className="hand-row w-full flex items-end justify-center sm:-space-x-2 md:space-x-1 lg:space-x-2"
-          style={{ '--hand-count': stableHand.length } as React.CSSProperties}
+          className={cn(
+            'hand-row w-full flex items-end justify-center sm:-space-x-2 md:space-x-1 lg:space-x-2',
+            dealing && 'hand-dealing'
+          )}
+          style={
+            {
+              '--hand-count': stableHand.length,
+              '--deal-start': `${HAND_DEAL_START_MS}ms`,
+            } as React.CSSProperties
+          }
         >
           {stableHand.map((card) => {
             const canPlay = meta.isMyTurnToPlay && legalSet.has(card.id);
@@ -917,6 +930,29 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
     preloadDeckAssets();
   }, []);
 
+  // Changes whenever a fresh hand is on the table: on page load during bidding,
+  // at the start of every round and after a restart.
+  const dealKey = useGameStore((s) => {
+    const r = s.room;
+    if (!r || r.phase !== 'BIDDING') return '';
+    return r.myHand.length > 0
+      ? r.myHand.map((c) => c.id).join(',')
+      : `round-${r.currentRound}`;
+  });
+  const [isDealing, setIsDealing] = useState(false);
+
+  // Layout effect, so the dealt hand never paints before the shuffle starts.
+  useLayoutEffect(() => {
+    if (!dealKey) {
+      setIsDealing(false);
+      return;
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    setIsDealing(true);
+    const id = window.setTimeout(() => setIsDealing(false), SHUFFLE_DEAL_TOTAL_MS);
+    return () => window.clearTimeout(id);
+  }, [dealKey]);
+
   useEffect(() => {
     if (phase === 'GAME_COMPLETE') {
       // The match is over: show the podium instead of the round summary.
@@ -959,7 +995,12 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
               <SeatPlate pos="left" showCardBackFan />
             </div>
 
-            <div className="col-span-6 flex flex-col items-center justify-center min-h-0">
+            <div
+              className={cn(
+                'col-span-6 flex flex-col items-center justify-center min-h-0',
+                isDealing && 'invisible'
+              )}
+            >
               <CenterArena />
             </div>
 
@@ -969,7 +1010,9 @@ export const GameTable: React.FC<GameTableProps> = ({ onLeaveRoom }) => {
           </div>
 
           {/* Bottom Hand & Player Seat */}
-          <PlayerHandBar />
+          <PlayerHandBar dealing={isDealing} />
+
+          {isDealing && <ShuffleDeal key={dealKey} />}
         </div>
 
         <ChatDrawer />
