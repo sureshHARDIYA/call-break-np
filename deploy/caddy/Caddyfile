@@ -21,3 +21,10 @@
 
 	reverse_proxy app:3000
 }
+
+# Other names for this server (for example the bare-IP sslip.io address) send
+# visitors to the main domain. DOMAIN must be a single host for this to work.
+{$REDIRECT_DOMAINS} {
+	header -Server
+	redir https://{$DOMAIN}{uri} permanent
+}
